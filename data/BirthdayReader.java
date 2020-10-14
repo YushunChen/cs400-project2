@@ -48,8 +48,9 @@ public class BirthdayReader {
      * its contents into an array list of birthdays.
      * 
      * @param filename the string name of the csv file
+     * @return returns true if the file was successfully read or false if otherwise
      */
-    public void getBirthdaysFromCSV(String filename) {
+    public boolean getBirthdaysFromCSV(String filename) {
 
         File file = null;
         Scanner filescanner = null;
@@ -63,7 +64,7 @@ public class BirthdayReader {
             
         } catch (FileNotFoundException e1) {
             System.out.println("Error reading file or file not found!");
-            return;
+            return false;
         } 
 
         // birthday line buffer
@@ -83,10 +84,10 @@ public class BirthdayReader {
             } catch (IllegalBirthdayFormatException e) {
                 System.out.println(e.getMessage());
             }
-
         }
 
         // close scanner
         filescanner.close();
+        return true;
     }
 }

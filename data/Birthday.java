@@ -121,6 +121,7 @@ public class Birthday implements Comparable<Birthday> {
     /**
      * Converts the date of this birthday to its long format for use within
      * the constructor method.
+     * 
      * @param birthday the string of this birthday
      * @return the long format of the birthday
      */
@@ -206,10 +207,11 @@ public class Birthday implements Comparable<Birthday> {
         }
     }
 
-/* 
-*******Main method for seeing functionality: uncomment for testing it out on your machine*********
-
-
+    /**
+     * Main method for seeing functionality: uncomment for testing it out on your machine
+     * 
+     * @param args unused
+     */
     public static void main(String[] args) {
         
         // creating a birthday example -- see class description for long/short formats
@@ -218,6 +220,8 @@ public class Birthday implements Comparable<Birthday> {
         Birthday birthday3 = null;
         Birthday birthday4 = null;
 
+        // birthday constructor throws format exception if birthday 
+        //is incorrect format
         try {
             birthday = new Birthday("1990/07/27/03/45", "Patrick", "Harvey");
             birthday2 = new Birthday("1652/05/13/16/00", "Charleton", "Heston");
@@ -228,21 +232,27 @@ public class Birthday implements Comparable<Birthday> {
             return;
         }
 
+        System.out.println(birthday.getBirthday());
+
         // to string examples
         System.out.println(birthday);
         System.out.println(birthday2);
         System.out.println(birthday3);
         System.out.println(birthday4);
 
-
-        // comparisons 
+        // comparison examples
         System.out.println(birthday.compareTo(birthday2));
+        System.out.println(birthday2.compareTo(birthday4));
 
         // testing birthday reader usage
         BirthdayReader bdayReader = new BirthdayReader();
         bdayReader.getBirthdaysFromCSV("birthdays.csv");
-        System.out.println(bdayReader.getBirthdayList());
+
+        // printing bday list
+        for (Birthday bday : bdayReader.getBirthdayList()) {
+            System.out.println(bday);
+        }
 
     }
-    */
+
 }

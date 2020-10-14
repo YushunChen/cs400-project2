@@ -1,6 +1,5 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "opencsv5.2.jar"
     ]
 }
