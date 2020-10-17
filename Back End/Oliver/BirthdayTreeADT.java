@@ -17,12 +17,12 @@
 public interface BirthdayTreeADT {
 
   /**
-   * Loads an array list of birthdays from the BirthdayRead and store them into the birthday tree
+   * Loads birthdays from a CSV file using the BirthdayReader and store them into the birthday tree
    * 
    * @param csvFile the file name of the CSV file
    * @return true if successfully loaded, and false otherwise
    */
-  public boolean loadBirthdaysFromReader(BirthdayReader reader);
+  public boolean loadBirthdaysFromReader(String fileName);
 
   /**
    * Adds a birthday object to the birthday tree (red black tree).
