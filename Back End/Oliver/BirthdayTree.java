@@ -48,6 +48,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     for (Birthday i : list) {
       try {
         bdTree.insert(i);
+        bdList.add(i);
         size++;
       } catch (NullPointerException e1) {
         System.out.print("The provided data argument (Birthday) is null!");
@@ -70,6 +71,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   public boolean addBirthday(Birthday newBD) throws BirthdayAlreadyAddedException {
     try {
       bdTree.insert(newBD);
+      bdList.add(newBD);
       root = bdTree.root;
       size++;
     } catch (NullPointerException e1) {
@@ -167,6 +169,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    */
   @Override
   public void list() {
+    loadList(root);
     for (Birthday i : bdList) {
       System.out.println(i);
     }
@@ -245,7 +248,6 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree2.getSize());
 
     // Listing all birthdays
-    tree2.loadList(tree2.root);
     tree2.list();
 
     System.out.println("====================Test Clear========================");
