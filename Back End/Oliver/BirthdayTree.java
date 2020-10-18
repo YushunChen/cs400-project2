@@ -21,6 +21,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   private RedBlackTree<Birthday> bdTree;
   private Node<Birthday> root;
   private int size;
+  private ArrayList<Birthday> bdList;
 
   /**
    * Constructor of BirthdayTree without parameter
@@ -28,6 +29,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   public BirthdayTree() {
     bdTree = new RedBlackTree<Birthday>();
     root = bdTree.root;
+    bdList = new ArrayList<Birthday>();
   }
 
   /**
@@ -39,7 +41,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public boolean loadBirthdaysFromReader(String fileName) {
     BirthdayReader reader = new BirthdayReader();
-    reader.getBirthdaysFromCSV("birthdays.csv");
+    reader.getBirthdaysFromCSV(fileName);
     ArrayList<Birthday> list = reader.getBirthdayList();
     for (Birthday i : list) {
       try {
@@ -147,13 +149,46 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   }
 
   /**
+   * Loads the array list with birthdays for listing purpose
+   * 
+   * @param current node to start with
+   */
+  public void loadList(Node<Birthday> current) {
+    if (current == null) { // base case for the recursive method
+      return;
+    }
+    if (current.leftChild != null) {
+      // recursively call the method when current has a left child
+      bdList.add(current.leftChild.data);
+      loadList(current.leftChild);
+    }
+    // after getting the left child and the parent, obtain the right child
+    if (current.rightChild != null) {
+      bdList.add(current.rightChild.data);
+      loadList(current.rightChild);
+    }
+  }
+   /**
    * Lists all the birthday objects stored in the birthday tree.
    */
   @Override
   public void list() {
-    System.out.println(bdTree.toString());
+    for (Birthday i : bdList) {
+      System.out.println(i);
+    }
   }
-
+  
+  /**
+   * Getter method for the array list of birthdays
+   */
+  @Override
+  public ArrayList<Birthday> getList() {
+    return bdList;
+  }
+  
+  /**
+   * Getter method for the number of birthday objects in the tree
+   */
   @Override
   public int getSize() {
     return size;
@@ -164,6 +199,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public void clear() {
     root = null;
+    size = 0;
+    bdList = new ArrayList<Birthday>();
   }
 
   public static void main(String[] args) {
@@ -207,6 +244,10 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree2.root.rightChild.data);
     System.out.println(tree2.size);
     System.out.println(tree2.getSize());
+    
+    // Listing all birthdays
+    tree2.loadList(tree2.root);
+    tree2.list();
 
     System.out.println("====================Test Clear========================");
     tree2.clear();

@@ -7,6 +7,7 @@
 // Lecturer: Florian Heimerl
 // Notes to Grader: Project 2 Birthday Search Tool (Back End Section)
 
+import java.util.ArrayList;
 
 /**
  * Birthday Tree ADT containing public methods for a birthday tree that is established using a red
@@ -62,6 +63,12 @@ public interface BirthdayTreeADT {
    */
   public int getSize();
 
+  /**
+   * Obtains the array list for listing
+   * 
+   * @return the array list of birthdays
+   */
+  public ArrayList<Birthday> getList();
   /**
    * Clears all the birthday objects stored in the birthday tree.
    */
