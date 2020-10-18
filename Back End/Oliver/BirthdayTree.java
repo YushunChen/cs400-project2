@@ -21,6 +21,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   private RedBlackTree<Birthday> bdTree;
   private Node<Birthday> root;
   private int size;
+  private ArrayList<Birthday> bdList;
 
   /**
    * Constructor of BirthdayTree without parameter
@@ -28,6 +29,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   public BirthdayTree() {
     bdTree = new RedBlackTree<Birthday>();
     root = bdTree.root;
+    bdList = new ArrayList<Birthday>();
   }
 
   /**
@@ -39,7 +41,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public boolean loadBirthdaysFromReader(String fileName) {
     BirthdayReader reader = new BirthdayReader();
-    reader.getBirthdaysFromCSV("birthdays.csv");
+    reader.getBirthdaysFromCSV(fileName);
     ArrayList<Birthday> list = reader.getBirthdayList();
     for (Birthday i : list) {
       try {
@@ -113,37 +115,47 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     return foundBirthday;
   }
 
-  // TODO: Discuss
+  /**
+   * Searches a birthday object by a person's name (not searching through tree directly). Different
+   * from search by birthday (Date)
+   * 
+   * @param firstName first name of the person
+   * @param lastName  last name of the person
+   * @return the birthday object found
+   * @throws BirthdayNotFoundException thrown when the birthday is not found
+   */
   @Override
   public Birthday searchName(String firstName, String lastName) throws BirthdayNotFoundException {
+    loadList(root);
     Birthday findBd = null;
-    try {
-      findBd = new Birthday("", firstName, lastName);
-    } catch (IllegalBirthdayFormatException e) {
-      System.out.println("The birthday format is illegal!");
+    for (Birthday i : bdList) {
+      if ((i.getFirstName().equals(firstName)) && i.getLastName().equals(lastName)) {
+        findBd = i;
+        break;
+      }
     }
-    return this.searchNameHelper(findBd, bdTree.root);
+    return findBd;
   }
 
-  // TODO: Discuss
-  private Birthday searchNameHelper(Birthday findBd, Node<Birthday> current)
-      throws BirthdayNotFoundException {
-    if (current == null) { // no patient record whose date of birth matches dates stored in the BST
-      throw new BirthdayNotFoundException(
-          "There is no birthday as stated that is stored in this birthday tree!");
+  /**
+   * Loads the array list with birthdays for listing purpose
+   * 
+   * @param current node to start with
+   */
+  public void loadList(Node<Birthday> current) {
+    if (current == null) { // base case for the recursive method
+      return;
     }
-    int compareNum = findBd.compareTo(current.data); // compare result
-    Birthday foundBirthday = null;
-    if (compareNum == 0) { // immediately found!
-      foundBirthday = current.data;
-    } else if (compareNum < 0) {
-      // traverse to the left of the BST if findRecord is older than current
-      foundBirthday = searchNameHelper(findBd, current.leftChild);
-    } else {
-      // traverse to the right of the BST if findRecord is younger than current
-      foundBirthday = searchNameHelper(findBd, current.rightChild);
+    if (current.leftChild != null) {
+      // recursively call the method when current has a left child
+      bdList.add(current.leftChild.data);
+      loadList(current.leftChild);
     }
-    return foundBirthday;
+    // after getting the left child and the parent, obtain the right child
+    if (current.rightChild != null) {
+      bdList.add(current.rightChild.data);
+      loadList(current.rightChild);
+    }
   }
 
   /**
@@ -151,19 +163,35 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    */
   @Override
   public void list() {
-    System.out.println(bdTree.toString());
+    for (Birthday i : bdList) {
+      System.out.println(i);
+    }
   }
 
+  /**
+   * Getter method for the array list of birthdays
+   */
+  @Override
+  public ArrayList<Birthday> getList() {
+    return bdList;
+  }
+
+  /**
+   * Getter method for the number of birthday objects in the tree
+   */
   @Override
   public int getSize() {
     return size;
   }
+
   /**
    * Clears all the birthday objects stored in the birthday tree.
    */
   @Override
   public void clear() {
     root = null;
+    size = 0;
+    bdList = new ArrayList<Birthday>();
   }
 
   public static void main(String[] args) {
@@ -199,6 +227,10 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree.searchBirthday("1988/10/01"));
 
 
+    // Check searchName method
+    System.out.println("================Test searchName====================");
+    System.out.println(tree.searchName("Charleton", "Heston"));
+    
     System.out.println("================Test loadBirthdaysFromReader====================");
     BirthdayTree tree2 = new BirthdayTree();
     tree2.loadBirthdaysFromReader("birthdays.csv");
@@ -208,13 +240,17 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree2.size);
     System.out.println(tree2.getSize());
 
+    // Listing all birthdays
+    tree2.loadList(tree2.root);
+    tree2.list();
+
     System.out.println("====================Test Clear========================");
     tree2.clear();
     if (tree2.root == null) {
       System.out.println(
           "The tree has been cleared and the garbage collector will clean the rest of the tree");
     }
-    
+
     System.out.println("====================Test list========================");
     tree2.list();
 
