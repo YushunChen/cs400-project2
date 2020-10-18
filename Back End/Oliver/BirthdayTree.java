@@ -20,6 +20,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   // A red black tree of birthday objects
   private RedBlackTree<Birthday> bdTree;
   private Node<Birthday> root;
+  private int size;
 
   /**
    * Constructor of BirthdayTree without parameter
@@ -43,6 +44,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     for (Birthday i : list) {
       try {
         bdTree.insert(i);
+        size++;
       } catch (NullPointerException e1) {
         System.out.print("The provided data argument (Birthday) is null!");
       } catch (BirthdayAlreadyAddedException e2) {
@@ -65,10 +67,9 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     try {
       bdTree.insert(newBD);
       root = bdTree.root;
+      size++;
     } catch (NullPointerException e1) {
       System.out.print("The provided data argument (Birthday) is null!");
-    } catch (BirthdayAlreadyAddedException e2) {
-      System.out.print("This birthday object has already been added!");
     }
     return true;
   }
@@ -153,6 +154,10 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(bdTree.toString());
   }
 
+  @Override
+  public int getSize() {
+    return size;
+  }
   /**
    * Clears all the birthday objects stored in the birthday tree.
    */
@@ -200,6 +205,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree2.root.data);
     System.out.println(tree2.root.leftChild.data);
     System.out.println(tree2.root.rightChild.data);
+    System.out.println(tree2.size);
+    System.out.println(tree2.getSize());
 
     System.out.println("====================Test Clear========================");
     tree2.clear();

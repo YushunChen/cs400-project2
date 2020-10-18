@@ -56,6 +56,11 @@ public interface BirthdayTreeADT {
    * Lists all the birthday objects stored in the birthday tree.
    */
   public void list();
+  
+  /**
+   * Obtains the size of the tree.
+   */
+  public int getSize();
 
   /**
    * Clears all the birthday objects stored in the birthday tree.
