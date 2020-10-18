@@ -115,37 +115,26 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     return foundBirthday;
   }
 
-  // TODO: Discuss
+  /**
+   * Searches a birthday object by a person's name (not searching through tree directly). Different
+   * from search by birthday (Date)
+   * 
+   * @param firstName first name of the person
+   * @param lastName  last name of the person
+   * @return the birthday object found
+   * @throws BirthdayNotFoundException thrown when the birthday is not found
+   */
   @Override
   public Birthday searchName(String firstName, String lastName) throws BirthdayNotFoundException {
+    loadList(root);
     Birthday findBd = null;
-    try {
-      findBd = new Birthday("", firstName, lastName);
-    } catch (IllegalBirthdayFormatException e) {
-      System.out.println("The birthday format is illegal!");
+    for (Birthday i : bdList) {
+      if ((i.getFirstName().equals(firstName)) && i.getLastName().equals(lastName)) {
+        findBd = i;
+        break;
+      }
     }
-    return this.searchNameHelper(findBd, bdTree.root);
-  }
-
-  // TODO: Discuss
-  private Birthday searchNameHelper(Birthday findBd, Node<Birthday> current)
-      throws BirthdayNotFoundException {
-    if (current == null) { // no patient record whose date of birth matches dates stored in the BST
-      throw new BirthdayNotFoundException(
-          "There is no birthday as stated that is stored in this birthday tree!");
-    }
-    int compareNum = findBd.compareTo(current.data); // compare result
-    Birthday foundBirthday = null;
-    if (compareNum == 0) { // immediately found!
-      foundBirthday = current.data;
-    } else if (compareNum < 0) {
-      // traverse to the left of the BST if findRecord is older than current
-      foundBirthday = searchNameHelper(findBd, current.leftChild);
-    } else {
-      // traverse to the right of the BST if findRecord is younger than current
-      foundBirthday = searchNameHelper(findBd, current.rightChild);
-    }
-    return foundBirthday;
+    return findBd;
   }
 
   /**
@@ -168,7 +157,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
       loadList(current.rightChild);
     }
   }
-   /**
+
+  /**
    * Lists all the birthday objects stored in the birthday tree.
    */
   @Override
@@ -177,7 +167,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
       System.out.println(i);
     }
   }
-  
+
   /**
    * Getter method for the array list of birthdays
    */
@@ -185,7 +175,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   public ArrayList<Birthday> getList() {
     return bdList;
   }
-  
+
   /**
    * Getter method for the number of birthday objects in the tree
    */
@@ -193,6 +183,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   public int getSize() {
     return size;
   }
+
   /**
    * Clears all the birthday objects stored in the birthday tree.
    */
@@ -236,6 +227,10 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree.searchBirthday("1988/10/01"));
 
 
+    // Check searchName method
+    System.out.println("================Test searchName====================");
+    System.out.println(tree.searchName("Charleton", "Heston"));
+    
     System.out.println("================Test loadBirthdaysFromReader====================");
     BirthdayTree tree2 = new BirthdayTree();
     tree2.loadBirthdaysFromReader("birthdays.csv");
@@ -244,7 +239,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     System.out.println(tree2.root.rightChild.data);
     System.out.println(tree2.size);
     System.out.println(tree2.getSize());
-    
+
     // Listing all birthdays
     tree2.loadList(tree2.root);
     tree2.list();
@@ -255,7 +250,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
       System.out.println(
           "The tree has been cleared and the garbage collector will clean the rest of the tree");
     }
-    
+
     System.out.println("====================Test list========================");
     tree2.list();
 
