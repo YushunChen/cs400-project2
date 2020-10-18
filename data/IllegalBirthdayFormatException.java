@@ -1,11 +1,11 @@
 // --== CS400 File Header Information ==--
 // Name: Patrick Harvey
 // Email: plharvey@wisc.edu
-// Team: Team AB
+// Team: AB
+// Role: Data Wrangler
 // TA: Sophie Stephenson
 // Lecturer: Gary Dahl
 // Notes to Grader: Used within Project 2 for Birthday Search Tool
-// Contribution: Data Wrangler section
 
 
 /**

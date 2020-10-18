@@ -1,11 +1,11 @@
 // --== CS400 File Header Information ==--
 // Name: Patrick Harvey
 // Email: plharvey@wisc.edu
-// Team: Team AB
+// Team: AB
+// Role: Data Wrangler
 // TA: Sophie Stephenson
 // Lecturer: Gary Dahl
 // Notes to Grader: Used within Project 2 for Birthday Search Tool
-// Contribution: Data Wrangler section
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,6 +64,12 @@ public class Birthday implements Comparable<Birthday> {
         this.firstName = firstName;
         this.lastName = lastName;
 
+        // check for null pointer in stringdate
+        if (stringDate == null) {
+            throw new IllegalBirthdayFormatException("There was in error in reading the format: "
+            + " You cannot use null strings.");
+        }
+
         try {
             // determine whether the format is long of short
             String PATTERN = determineFormat(stringDate);
@@ -71,18 +77,12 @@ public class Birthday implements Comparable<Birthday> {
             // use the determined pattern for the birthday format
             BIRTHDAY_FORMAT = new SimpleDateFormat(PATTERN); 
 
-        // catch incorrect formats for birthday and throw exception
-        } catch (PatternSyntaxException e) {
-            throw new IllegalBirthdayFormatException("There was an error in reading the format" 
-            + " of this birthday date: " + stringDate + " " + firstName + " " + lastName);
-        }
-
-        // attempt to parse string date into appropriate format
-        try {
+            // sets the birthday date with the parsed Date format
             this.birthdayDate = BIRTHDAY_FORMAT.parse(stringDate);    
-        } catch (ParseException e1) {
-            System.out.println("Error: There was a problem parsing the provided string date.");
-            throw new IllegalBirthdayFormatException("There was an error in parsing the format" 
+
+        // catch incorrect formats for birthday and throw exception
+        } catch (PatternSyntaxException|ParseException e) {
+            throw new IllegalBirthdayFormatException("There was an error in reading the format" 
             + " of this birthday date: " + stringDate + " " + firstName + " " + lastName);
         }
 
@@ -226,7 +226,7 @@ public class Birthday implements Comparable<Birthday> {
             birthday = new Birthday("1990/07/27/03/45", "Patrick", "Harvey");
             birthday2 = new Birthday("1652/05/13/16/00", "Charleton", "Heston");
             birthday3 = new Birthday("1988/02/29", "Edward","Bryant");
-            birthday4 = new Birthday("1988/10/01", "Somebody","Else");
+            birthday4 = new Birthday("1980/15/12/12/12", "Somebody","Else");
         } catch (IllegalBirthdayFormatException e) {
             System.out.println(e.getMessage());
             return;
