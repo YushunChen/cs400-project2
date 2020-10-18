@@ -41,7 +41,9 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public boolean loadBirthdaysFromReader(String fileName) {
     BirthdayReader reader = new BirthdayReader();
-    reader.getBirthdaysFromCSV(fileName);
+    if(!reader.getBirthdaysFromCSV(fileName)) { 
+      return false;
+    }
     ArrayList<Birthday> list = reader.getBirthdayList();
     for (Birthday i : list) {
       try {
@@ -72,6 +74,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
       size++;
     } catch (NullPointerException e1) {
       System.out.print("The provided data argument (Birthday) is null!");
+    } catch (IllegalArgumentException e2) {
+      throw new BirthdayAlreadyAddedException("The birthday is already added in the tree!");
     }
     return true;
   }
