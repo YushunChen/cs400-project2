@@ -169,7 +169,6 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    */
   @Override
   public void list() {
-    loadList(root);
     for (Birthday i : bdList) {
       System.out.println(i);
     }
