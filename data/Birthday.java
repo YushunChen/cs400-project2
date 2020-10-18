@@ -207,52 +207,5 @@ public class Birthday implements Comparable<Birthday> {
         }
     }
 
-    /**
-     * Main method for seeing functionality: uncomment for testing it out on your machine
-     * 
-     * @param args unused
-     */
-    public static void main(String[] args) {
-        
-        // creating a birthday example -- see class description for long/short formats
-        Birthday birthday = null;
-        Birthday birthday2 = null;
-        Birthday birthday3 = null;
-        Birthday birthday4 = null;
-
-        // birthday constructor throws format exception if birthday 
-        //is incorrect format
-        try {
-            birthday = new Birthday("1990/07/27/03/45", "Patrick", "Harvey");
-            birthday2 = new Birthday("1652/05/13/16/00", "Charleton", "Heston");
-            birthday3 = new Birthday("1988/02/29", "Edward","Bryant");
-            birthday4 = new Birthday("1980/15/12/12/12", "Somebody","Else");
-        } catch (IllegalBirthdayFormatException e) {
-            System.out.println(e.getMessage());
-            return;
-        }
-
-        System.out.println(birthday.getBirthday());
-
-        // to string examples
-        System.out.println(birthday);
-        System.out.println(birthday2);
-        System.out.println(birthday3);
-        System.out.println(birthday4);
-
-        // comparison examples
-        System.out.println(birthday.compareTo(birthday2));
-        System.out.println(birthday2.compareTo(birthday4));
-
-        // testing birthday reader usage
-        BirthdayReader bdayReader = new BirthdayReader();
-        bdayReader.getBirthdaysFromCSV("birthdays.csv");
-
-        // printing bday list
-        for (Birthday bday : bdayReader.getBirthdayList()) {
-            System.out.println(bday);
-        }
-
-    }
 
 }
