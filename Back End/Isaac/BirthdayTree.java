@@ -180,4 +180,12 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 		}
 	}
 	
+	/**
+	 * Accessor method for the ArrayList containing all the Birthdays currently in the tree 
+	 * @return birthdayList, the instance field containing all the birthdays currently in the tree
+	 */
+	public ArrayList<Birthday> getList() {
+		return this.birthdayList; 
+	}
+	
 } 
