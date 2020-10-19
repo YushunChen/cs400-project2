@@ -131,10 +131,10 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	}
 	
 	/**
-	 * Method to load a CSV containing birthdays into the birthdayTree
-	 * @param fileName name of the CSV file containing the birthdays
+	 * Reads and adds birthdays from a user-specified csv file to the BirthdayTree 
+	 * @param fileName String object representing the name of a csv file containing birthdays
 	 */
-	public void loadCSV(String fileName) { 
+	public boolean loadCSV(String fileName) { 
 		
 		BirthdayReader reader = new BirthdayReader();
 		if (reader.getBirthdaysFromCSV(fileName)) {
@@ -149,9 +149,9 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 			}
 		}
 		else {
-			return; 
+			return true; 
 		}
-		return; 
+		return true; 
 	}
 	
 	/**
@@ -188,4 +188,13 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 		return this.birthdayList; 
 	}
 	
-} 
+	/**
+	 * Accessor method for the size field of the BirthdayTree. Used by some diagnostic methods 
+	 * on the frontend
+	 * @return size, the current number of elements in the BirthdayTree.  
+	 */
+	public int getSize() {
+		return this.size; 
+	}
+	
+}
