@@ -216,6 +216,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public void clear() {
     bdTree = new RedBlackTree<Birthday>(); 
+    root = null;
     size = 0;
     bdList = new ArrayList<Birthday>();
   }
