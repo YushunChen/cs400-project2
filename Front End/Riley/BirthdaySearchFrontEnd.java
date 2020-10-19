@@ -82,17 +82,21 @@ public class BirthdaySearchFrontEnd {
         boolean success = false;
         String date = "";
         while(!success){
+            // get the first and last name of the person
             System.out.println("Enter first name of the desired person to add:");
             String firstName = input.nextLine().trim();
             System.out.println("Enter last name of the desired person to add:");
             String lastName = input.nextLine().trim();
+            // get the date of the birthday
             date = getBirthDate(input);
             Birthday birthday;
+            // try putting it all together in an object
             try{birthday = new Birthday(date, firstName, lastName);}
             catch(IllegalBirthdayFormatException e){
                 System.out.println("The date of that birthday was malformed");
                 return;
             }
+            // try adding it to the tree, or catch the duplicate error and exit
             try{
                 birthdayTree.addBirthday(birthday);
                 success = true;
@@ -114,8 +118,10 @@ public class BirthdaySearchFrontEnd {
     private static String getBirthDate(Scanner input){
         boolean success = false;
         String date = "";
+        // taken from the Birthday.java file
         Pattern pattern = Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}/[0-9]{2}/[0-9]{2}");
         while(!success){
+            // get each date component
             System.out.println("Enter the year in format 'YYYY':");
             String year = input.nextLine().trim();
             System.out.println("Enter the year in format 'MM':");
@@ -126,13 +132,17 @@ public class BirthdaySearchFrontEnd {
             String hour = input.nextLine().trim();
             System.out.println("Enter the year in format 'mm':");
             String min = input.nextLine().trim();
+            // var for making sure values are in proper ranges
             boolean checkedValues = false;
+            // var for making sure the date is properly formatted
             boolean matched = false;
             try {
+                // year can be anything, so just check the other ones to make sure they make sense
                 int monthInt = Integer.parseInt(month);
                 int dayInt = Integer.parseInt(day);
                 int hourInt = Integer.parseInt(hour);
                 int minInt = Integer.parseInt(min);
+                // ranges: month-[1, 12], day-[1,31], hour-[0,23](24 hr time), min-[0,59]
                 if (1<=monthInt && monthInt<=12 && 1<=dayInt && dayInt<=31 &&
                         0<=hourInt && hourInt<=23 && 0<=minInt && minInt<=59){
                     checkedValues = true;
@@ -165,6 +175,7 @@ public class BirthdaySearchFrontEnd {
             temp = input.nextLine().trim().toLowerCase();
         }
         if (temp.equals("d")){
+            // search by date
             String date = getBirthDate(input);
             try{
                 birthday = birthdayTree.searchBirthday(date);
@@ -173,6 +184,7 @@ public class BirthdaySearchFrontEnd {
             catch (BirthdayNotFoundException e){}
         }
         else{
+            // search by name
             System.out.println("Enter first name of the desired person to search for:");
             String firstName = input.nextLine().trim();
             System.out.println("Enter last name of the desired person to search for:");
@@ -200,6 +212,7 @@ public class BirthdaySearchFrontEnd {
      * @param input the user input to get data for operation from
      */
     public static void clear(Scanner input){
+        // Confirm that they want to delete their tree
         System.out.println("Are you sure you want to clear the birthday tree (y or n)?");
         boolean clear = yesNoInput(input);
         if(clear){
@@ -215,12 +228,14 @@ public class BirthdaySearchFrontEnd {
      * @param input the user input to get data for operation from
      */
     public static void printBirthdaysInRange(Scanner input){
+        // get the start and end birthday objects for the range
         String startDate = "";
         String endDate = "";
         Birthday start, end;
         ArrayList<Birthday> inRange = new ArrayList<>();
         startDate = getBirthDate(input);
         endDate = getBirthDate(input);
+        // try creating bday objects for range, if error then a bad date was entered and just start over at menu
         try{start = new Birthday(startDate, "Kakashi", "Hatake");}
         catch(IllegalBirthdayFormatException e){
             System.out.println("The start date was malformed. Returning to menu.");
@@ -231,6 +246,10 @@ public class BirthdaySearchFrontEnd {
             System.out.println("The end date was malformed. Returning to menu.");
             return;
         }
+        // for all the birthdays, check if they are in the range
+        // if start.compareTo(b) is not 1, b is greater than or equal to that date
+        // and if end.compareTo(b) is not -1, b is less than or equal to that date
+        // So, putting these together shows it's in range
         for(Birthday b: birthdayTree.getList()){
             if(start.compareTo(b) != 1 && end.compareTo(b) != -1)
                 inRange.add(b);
@@ -260,6 +279,7 @@ public class BirthdaySearchFrontEnd {
      */
     public static void birthdaysToday(){
         ZoneId zoneId = ZoneId.of("America/Montreal");
+        // get the current day and month
         LocalDate localDate = LocalDate.now(zoneId);
         int month = localDate.getMonthValue();
         int day = localDate.getDayOfMonth();
