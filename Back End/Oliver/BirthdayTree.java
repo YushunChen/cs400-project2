@@ -17,10 +17,13 @@ import java.util.ArrayList;
  */
 public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTreeADT {
 
-  // A red black tree of birthday objects
+  // a red black tree of birthday objects
   private RedBlackTree<Birthday> bdTree;
+  // root of the tree
   private Node<Birthday> root;
+  // size of the tree (number of nodes/birthdays)
   private int size;
+  // an array list of birthdays for some front end methods
   private ArrayList<Birthday> bdList;
 
   /**
@@ -44,6 +47,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     if(!reader.getBirthdaysFromCSV(fileName)) { 
       return false;
     }
+    // utilize the BirthdayReader class to get a list of birthdays
     ArrayList<Birthday> list = reader.getBirthdayList();
     for (Birthday i : list) {
       try {
@@ -56,6 +60,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
         System.out.print("This birthday object has already been added!");
       }
     }
+    // update the root of the birthday tree to be the root of the red black tree
     root = bdTree.root;
     return true;
   }
@@ -70,6 +75,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public boolean addBirthday(Birthday newBD) throws BirthdayAlreadyAddedException {
     try {
+      // add individual birthdays
       bdTree.insert(newBD);
       bdList.add(newBD);
       root = bdTree.root;
@@ -94,6 +100,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     Birthday findBd = null;
     root = bdTree.root;
     try {
+      // create a birthday object with only date to traverse for comparison in the tree
       findBd = new Birthday(date, "", "");
     } catch (IllegalBirthdayFormatException e) {
       System.out.println("The birthday format is illegal!");
@@ -103,13 +110,15 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 
   private Birthday searchBirthdayHelper(Birthday findBd, Node<Birthday> current)
       throws BirthdayNotFoundException {
-    if (current == null) { // no birthday matches dates stored in the BST
+    if (current == null) { 
+      // no birthday matches dates stored in the BST
       throw new BirthdayNotFoundException(
           "There is no birthday as stated that is stored in this birthday tree!");
     }
-    int compareNum = findBd.compareTo(current.data); // compare result
+    int compareNum = findBd.compareTo(current.data); 
     Birthday foundBirthday = null;
-    if (compareNum == 0) { // immediately found!
+    if (compareNum == 0) { 
+      // immediately found!
       foundBirthday = current.data;
     } else if (compareNum < 0) {
       // traverse to the left of the RBT if date is after current
@@ -132,6 +141,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    */
   @Override
   public Birthday searchName(String firstName, String lastName) throws BirthdayNotFoundException {
+    // load the array list of birthdays
     loadList(root);
     Birthday findBd = null;
     for (Birthday i : bdList) {
@@ -149,7 +159,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    * @param current node to start with
    */
   public void loadList(Node<Birthday> current) {
-    if (current == null) { // base case for the recursive method
+    if (current == null) { 
+      // base case for the recursive method
       return;
     }
     if (current.leftChild != null) {
@@ -189,77 +200,25 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   public int getSize() {
     return size;
   }
+  
+  /**
+   * Getter method for the root of the birthday tree
+   * 
+   * @return the root node of the tree
+   */
+  public Node<Birthday> getRoot() {
+    return root;
+  }
 
   /**
    * Clears all the birthday objects stored in the birthday tree.
    */
   @Override
   public void clear() {
+    bdTree = new RedBlackTree<Birthday>(); 
     root = null;
     size = 0;
     bdList = new ArrayList<Birthday>();
-  }
-
-  public static void main(String[] args) {
-    BirthdayTree tree = new BirthdayTree();
-
-    Birthday birthday1 = null;
-    Birthday birthday2 = null;
-    Birthday birthday3 = null;
-    Birthday birthday4 = null;
-    try {
-      birthday1 = new Birthday("1990/07/27/03/45", "Patrick", "Harvey");
-      birthday2 = new Birthday("1652/05/13/16/00", "Charleton", "Heston");
-      birthday3 = new Birthday("1988/02/29", "Edward", "Bryant");
-      birthday4 = new Birthday("1988/10/01", "Somebody", "Else");
-    } catch (IllegalBirthdayFormatException e) {
-      System.out.println(e.getMessage());
-    }
-    tree.addBirthday(birthday1);
-    tree.addBirthday(birthday2);
-    tree.addBirthday(birthday3);
-    tree.addBirthday(birthday4);
-
-    // Check nodes after adding birthdays
-    System.out.println("================Test addBirthday====================");
-    System.out.println(tree.root.data);
-    System.out.println(tree.root.leftChild.data);
-    System.out.println(tree.root.rightChild.data);
-
-    // Check searchBirthday method
-    System.out.println("================Test searchBirthday====================");
-    System.out.println(tree.searchBirthday("1988/02/29"));
-    System.out.println(tree.searchBirthday("1990/07/27/03/45"));
-    System.out.println(tree.searchBirthday("1988/10/01"));
-
-
-    // Check searchName method
-    System.out.println("================Test searchName====================");
-    System.out.println(tree.searchName("Charleton", "Heston"));
-    
-    System.out.println("================Test loadBirthdaysFromReader====================");
-    BirthdayTree tree2 = new BirthdayTree();
-    tree2.loadBirthdaysFromReader("birthdays.csv");
-    System.out.println(tree2.root.data);
-    System.out.println(tree2.root.leftChild.data);
-    System.out.println(tree2.root.rightChild.data);
-    System.out.println(tree2.size);
-    System.out.println(tree2.getSize());
-
-    // Listing all birthdays
-    tree2.list();
-
-    System.out.println("====================Test Clear========================");
-    tree2.clear();
-    if (tree2.root == null) {
-      System.out.println(
-          "The tree has been cleared and the garbage collector will clean the rest of the tree");
-    }
-
-    System.out.println("====================Test list========================");
-    tree2.list();
-
-
   }
 
 }

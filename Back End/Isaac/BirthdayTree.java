@@ -134,7 +134,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * Reads and adds birthdays from a user-specified csv file to the BirthdayTree 
 	 * @param fileName String object representing the name of a csv file containing birthdays
 	 */
-	public boolean loadCSV(String fileName) { 
+	public boolean loadBirthdaysFromReader(String fileName) { 
 		
 		BirthdayReader reader = new BirthdayReader();
 		if (reader.getBirthdaysFromCSV(fileName)) {
@@ -162,8 +162,9 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * @param firstName First name of the specified Birthday
 	 * @param lastName Last name of the specified Birthday
 	 * @return the matching Birthday object if found, null otherwise. 
+	 * @Override
 	 */
-	public Birthday searchByName(String firstName, String lastName) {
+	public Birthday searchName(String firstName, String lastName) {
 		for (Birthday birthday: birthdayList) {
 			if ((birthday.getFirstName().equals(firstName)) && birthday.getLastName().equals(lastName)) {
 				return birthday; 
@@ -176,7 +177,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * Method to iterate through the LinkedList containing all the Birthdays in the tree and print them out.
 	 */
 	public void list() {
-		for (Birthday birthday : birthdayList) {
+		for (Birthday birthday : birthdayList) { 
 			System.out.println(birthday); 
 		}
 	}
@@ -197,17 +198,11 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	public int getSize() {
 		return this.size; 
 	}
-
-	@Override
-	public boolean loadBirthdaysFromReader(String fileName) {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * Accessor method for the node contained at the root of the BirthdayTree 
+	 * @return Node<Birthday> this.tree.root, the roote node in the redBlackTree
+	 */
+	public Node<Birthday> getRoot() {
+		return this.tree.root; 
 	}
-
-	@Override
-	public Birthday searchName(String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }
