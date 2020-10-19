@@ -59,13 +59,15 @@ public class BirthdayReader {
             // initiate file
             file = new File(filename);
             //load file to scanner for reading read with comma delimiter
-            filescanner = new Scanner(file).useDelimiter(",");  
+            filescanner = new Scanner(file);  
             
         } catch (FileNotFoundException e1) {
             System.out.println("Error reading file or file not found!");
             return false;
-        } 
+        }
 
+        // set comma delimiter
+        filescanner.useDelimiter(",");
         // birthday line buffer
         String birthdayLine[];
         // skip initial line

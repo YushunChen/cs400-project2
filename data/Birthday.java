@@ -30,17 +30,19 @@ public class Birthday implements Comparable<Birthday> {
     private static final String STRING_LONG_PATTERN = "yyyy/MM/dd/HH/mm";
     private static final String STRING_SHORT_PATTERN = "yyyy/MM/dd";
 
-    // ([0][0-9])|([1][0-2]) for months
-    // ([012][0-9])|([3][0-1]) for days
-    // the regex format patterns used for birthdays
+    // backup
     // private static final Pattern LONG_PATTERN =
     // Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}/[0-9]{2}/[0-9]{2}");
     // private static final Pattern SHORT_PATTERN =
     // Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}");
 
+    // ([0][0-9])|([1][0-2]) for months
+    // ([012][0-9])|([3][0-1]) for days
+    // hours
+    // minutes
     // the regex format patterns used for birthdays
     private static final Pattern LONG_PATTERN = Pattern
-            .compile("([0-9]{4})/([0][0-9]|[1][0-2])/([012][0-9]|[3][0-1])/([0-9]{2})/([0-9]{2})");
+            .compile("([0-9]{4})/([0][0-9]|[1][0-2])/([012][0-9]|[3][0-1])/([0-1][0-9]|[2][0-3])/([0-5][0-9])");
     private static final Pattern SHORT_PATTERN = Pattern
             .compile("([0-9]{4})/([0][0-9]|[1][0-2])/([012][0-9]|[3][0-1])");
 
@@ -220,5 +222,4 @@ public class Birthday implements Comparable<Birthday> {
             return 0;
         }
     }
-
 }
