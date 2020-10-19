@@ -1,3 +1,12 @@
+// --== CS400 File Header Information ==--
+// Name: Isaac Schluesche
+// Email: ischluesche@wisc.edu
+// Team: AB
+// Role: Back End Developer
+// TA: Sophie Stephenson
+// Lecturer: Gary Dahl
+// Notes to Grader: <optional extra notes>
+
 /**
  * BirthdayTree Abstract Data Type used to define a set of methods 
  * laying out our birthday tree design and operations that may be performed 
@@ -34,5 +43,14 @@ public interface BirthdayTreeADT{
 	 * Method to load in a csv file containing birthdays into the RBT
 	 * @param fileName name of the CSV file containing Birthdays 
 	 */
-	public void loadCSV(String fileName);
+	public boolean loadBirthdaysFromReader(String fileName);
+	
+	/**
+	 * Method to search through the birthday tree by a specified first and last 
+	 * name pair. Returns the specified birthday if found. 
+	 * @param firstName String object containing first name 
+	 * @param lastName String object containing last name
+	 * @return Birthday object matching the name pair if found. 
+	 */
+	public Birthday searchName(String firstName, String lastName); 
 }
