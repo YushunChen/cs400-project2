@@ -17,10 +17,13 @@ import java.util.ArrayList;
  */
 public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTreeADT {
 
-  // A red black tree of birthday objects
+  // a red black tree of birthday objects
   private RedBlackTree<Birthday> bdTree;
+  // root of the tree
   private Node<Birthday> root;
+  // size of the tree (number of nodes/birthdays)
   private int size;
+  // an array list of birthdays for some front end methods
   private ArrayList<Birthday> bdList;
 
   /**
@@ -44,6 +47,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     if(!reader.getBirthdaysFromCSV(fileName)) { 
       return false;
     }
+    // utilize the BirthdayReader class to get a list of birthdays
     ArrayList<Birthday> list = reader.getBirthdayList();
     for (Birthday i : list) {
       try {
@@ -56,6 +60,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
         System.out.print("This birthday object has already been added!");
       }
     }
+    // update the root of the birthday tree to be the root of the red black tree
     root = bdTree.root;
     return true;
   }
@@ -70,6 +75,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
   @Override
   public boolean addBirthday(Birthday newBD) throws BirthdayAlreadyAddedException {
     try {
+      // add individual birthdays
       bdTree.insert(newBD);
       bdList.add(newBD);
       root = bdTree.root;
@@ -94,6 +100,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
     Birthday findBd = null;
     root = bdTree.root;
     try {
+      // create a birthday object with only date to traverse for comparison in the tree
       findBd = new Birthday(date, "", "");
     } catch (IllegalBirthdayFormatException e) {
       System.out.println("The birthday format is illegal!");
@@ -103,13 +110,15 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 
   private Birthday searchBirthdayHelper(Birthday findBd, Node<Birthday> current)
       throws BirthdayNotFoundException {
-    if (current == null) { // no birthday matches dates stored in the BST
+    if (current == null) { 
+      // no birthday matches dates stored in the BST
       throw new BirthdayNotFoundException(
           "There is no birthday as stated that is stored in this birthday tree!");
     }
-    int compareNum = findBd.compareTo(current.data); // compare result
+    int compareNum = findBd.compareTo(current.data); 
     Birthday foundBirthday = null;
-    if (compareNum == 0) { // immediately found!
+    if (compareNum == 0) { 
+      // immediately found!
       foundBirthday = current.data;
     } else if (compareNum < 0) {
       // traverse to the left of the RBT if date is after current
@@ -132,6 +141,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    */
   @Override
   public Birthday searchName(String firstName, String lastName) throws BirthdayNotFoundException {
+    // load the array list of birthdays
     loadList(root);
     Birthday findBd = null;
     for (Birthday i : bdList) {
@@ -149,7 +159,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    * @param current node to start with
    */
   public void loadList(Node<Birthday> current) {
-    if (current == null) { // base case for the recursive method
+    if (current == null) { 
+      // base case for the recursive method
       return;
     }
     if (current.leftChild != null) {
@@ -195,7 +206,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
    */
   @Override
   public void clear() {
-    root = null;
+    bdTree = new RedBlackTree<Birthday>(); 
     size = 0;
     bdList = new ArrayList<Birthday>();
   }
