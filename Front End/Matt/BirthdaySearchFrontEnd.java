@@ -80,7 +80,8 @@ public class BirthdaySearchFrontEnd {
                 year = userInput.nextLine().trim();
             }
         } else if (year.length() < 4) {
-            for (int i = 0; i < 4 - year.length(); i++)
+            int length = year.length();
+            for (int i = 0; i < 4 - length; i++)
                 year = "0" + year;
         }
 
@@ -99,7 +100,8 @@ public class BirthdaySearchFrontEnd {
                 month = userInput.nextLine().trim();
             }
         } else if (month.length() < 2) {
-            for (int i = 0; i < 2 - month.length(); i++)
+            int length = month.length();
+            for (int i = 0; i < 2 - length; i++)
                 month = "0" + month;
         }
 
@@ -118,7 +120,8 @@ public class BirthdaySearchFrontEnd {
                 date = userInput.nextLine().trim();
             }
         } else if (date.length() < 2) {
-            for (int i = 0; i < 2 - date.length(); i++)
+            int length = date.length();
+            for (int i = 0; i < 2 - length; i++)
                 date = "0" + date;
         }
 
@@ -150,7 +153,8 @@ public class BirthdaySearchFrontEnd {
                 hour = userInput.nextLine().trim();
             }
         } else if (hour.length() < 2) {
-            for (int i = 0; i < 2 - hour.length(); i++)
+            int length = hour.length();
+            for (int i = 0; i < 2 - length; i++)
                 hour = "0" + hour;
         }
 
@@ -169,7 +173,8 @@ public class BirthdaySearchFrontEnd {
                 minute = userInput.nextLine().trim();
             }
         } else if (minute.length() < 2) {
-            for (int i = 0; i < 2 - minute.length(); i++)
+            int length = minute.length();
+            for (int i = 0; i < 2 - length; i++)
                 minute = "0" + minute;
         }
 
@@ -296,9 +301,9 @@ public class BirthdaySearchFrontEnd {
                         System.out.println(firstName + "'s birthday was not added into the BST!");
                     }
                 } catch (BirthdayAlreadyAddedException e) {
-                    System.out.println("This person's birthday is already in the BST!");
+                    System.out.println(e);
                 } catch (IllegalBirthdayFormatException e) {
-                    System.out.println("This person's birthday is not in the proper format!");
+                    System.out.println(e);
                 }
                 // now that the birthday is added we can exit the while loop
                 break;
@@ -367,10 +372,13 @@ public class BirthdaySearchFrontEnd {
             System.out.println("Birthday: " + birthday.getBirthday());
 
         } catch (BirthdayNotFoundException e) {
+            System.out.println(e);
+            return;
+        }
+        catch(NullPointerException e) {
             System.out.println("Sorry! We could not find that person in the BST.");
             return;
         }
-
     }
 
     /**
@@ -415,6 +423,7 @@ public class BirthdaySearchFrontEnd {
             endDate = retrieveYearMonthDate(userInput, endDate);
             end = new Birthday(endDate, "end", "date");
         } catch (IllegalBirthdayFormatException e) {
+            System.out.println(e);
             // if exception is thrown, exit the method
             return;
         }
