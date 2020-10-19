@@ -176,7 +176,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * Method to iterate through the LinkedList containing all the Birthdays in the tree and print them out.
 	 */
 	public void list() {
-		for (Birthday birthday : birthdayList) {
+		for (Birthday birthday : birthdayList) { 
 			System.out.println(birthday); 
 		}
 	}
@@ -209,5 +209,6 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	
 }
