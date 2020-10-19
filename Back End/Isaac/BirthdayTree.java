@@ -141,9 +141,10 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 			ArrayList<Birthday> birthdayList = reader.getBirthdayList(); 
 			for (Birthday birthday : birthdayList) { 
 				try {
-					this.insert(birthday);
+					this.addBirthday(birthday);
 				}
 				catch (Exception e) {
+					System.out.println(e);
 					continue; 
 				}
 			}
@@ -195,6 +196,18 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 */
 	public int getSize() {
 		return this.size; 
+	}
+
+	@Override
+	public boolean loadBirthdaysFromReader(String fileName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Birthday searchName(String firstName, String lastName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
