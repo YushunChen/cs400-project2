@@ -184,8 +184,8 @@ public class BirthdaySearchFrontEnd {
             success = matched && checkedValues;
             if (!success) {
                 System.out.println("One of the fields entered was invalid. Try again.");
+                System.out.println("If you would like to quit, type q into any of the fields");
             }
-            System.out.println("If you would like to quit, type q into any of the fields");
         }
         return date;
     }
