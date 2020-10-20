@@ -2,7 +2,7 @@
 // Name: Peter Sykora
 // Email: psykora@wisc.edu
 // Team: AB
-// Role: Test Engineer
+// Role: Testing Engineer
 // TA: Sophie Stephenson
 // Lecturer: Gary Dahl
 // Notes to Grader: NONE
@@ -773,7 +773,8 @@ public class testBirthdaySearchTool {
    * 
    * @return true if all tests pass, false if otherwise
    */
-  public static boolean testClear() {
+  @Test
+  public void testClear() {
 
     { // Test 1 - clears a simple valid Red Black Tree
 
@@ -805,8 +806,7 @@ public class testBirthdaySearchTool {
         birthday9 = new Birthday("1998/01/09", "Steve", "Jeffry");
         birthday10 = new Birthday("1999/01/10", "Baggie", "Beach");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // all of these Birthday Objects should be valid input
+        fail("The creation of valid Birthday Objects should not throw an exception!");
       }
 
       // adds valid Birthday Objects to the BirthdayTree
@@ -828,22 +828,19 @@ public class testBirthdaySearchTool {
 
       // ensures that the size of an empty tree is zero
       if (tree.getSize() != 0) {
-        System.out.println("The size of an empty BirthdayTree should be 0!");
-        return false;
+        fail("The size of an empty BirthdayTree should be 0!");
       }
 
       // ensures that the root node of the empty tree is null
       if (tree.getRoot() != null) {
-        System.out.println("The root node of an empty tree should be null!");
-        return false;
+        fail("The root node of an empty tree should be null!");
       }
 
       // ensures that the ArrayList of the BirthdayTree is empty
       String listOutput = tree.getList().toString();
       String expectedListOutput = "[]";
       if (!listOutput.equals(expectedListOutput)) {
-        System.out.println("The ArrayList of Birthdays is wrong!");
-        return false;
+        fail("The ArrayList of Birthdays is wrong!");
       }
 
     }
@@ -865,8 +862,7 @@ public class testBirthdaySearchTool {
         birthday2 = new Birthday("1991/01/02", "Charleton", "Heston");
         birthday3 = new Birthday("1991/01/02", "Edward", "Bryant");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // all of these Birthday Objects should be "valid" input when not in the tree
+        fail("The creation of valid Birthday Objects should not throw an exception!");
       }
 
       // ensures that two objects with the same birthdate cannot be added to the tree
@@ -874,20 +870,16 @@ public class testBirthdaySearchTool {
         tree.addBirthday(birthday1);
         tree.addBirthday(birthday2);
         tree.addBirthday(birthday3); // this birthdate is the exact same as birthday2
-        // TODO:
-        return false; // if two objects with the same birthdate can be added to the tree
+        fail("Two objects with the same birthdate could be added to the tree!");
       } catch (BirthdayAlreadyAddedException e) {
-        System.out.println(e.getMessage());
       }
 
       // ensures that you cannot add a null Birthday Object or null reference in general to the tree
       if (tree.addBirthday(birthday4)) {
-        System.out.println("Could add a null Birthday Object to the tree which is wrong!");
-        return false;
+        fail("Could add a null Birthday Object to the tree which is wrong!");
       }
       if (tree.addBirthday(null)) {
-        System.out.println("Could add a null reference to the tree which is wrong!");
-        return false;
+        fail("Could add a null reference to the tree which is wrong!");
       }
 
       // ensures that these Birthday Objects can be cleared from the BirthdayTree
@@ -897,22 +889,19 @@ public class testBirthdaySearchTool {
 
       // ensures that the size of an empty tree is zero
       if (tree.getSize() != 0) {
-        System.out.println("The size of an empty BirthdayTree should be 0!");
-        return false;
+        fail("The size of an empty BirthdayTree should be 0!");
       }
 
       // ensures that the root node of the empty tree is null
       if (tree.getRoot() != null) {
-        System.out.println("The root node of an empty tree should be null!");
-        return false;
+        fail("The root node of an empty tree should be null!");
       }
 
       // ensures that the ArrayList of the BirthdayTree is empty
       String listOutput = tree.getList().toString();
       String expectedListOutput = "[]";
       if (!listOutput.equals(expectedListOutput)) {
-        System.out.println("The ArrayList of Birthdays is wrong!");
-        return false;
+        fail("The ArrayList of Birthdays is wrong!");
       }
 
     }
@@ -927,27 +916,23 @@ public class testBirthdaySearchTool {
 
       // ensures that the size of an empty tree is zero
       if (tree.getSize() != 0) {
-        System.out.println("The size of an empty BirthdayTree should be 0!");
-        return false;
+        fail("The size of an empty BirthdayTree should be 0!");
       }
 
       // ensures that the root node of the empty tree is null
       if (tree.getRoot() != null) {
-        System.out.println("The root node of an empty tree should be null!");
-        return false;
+        fail("The root node of an empty tree should be null!");
       }
 
       // ensures that the ArrayList of the BirthdayTree is empty
       String listOutput = tree.getList().toString();
       String expectedListOutput = "[]";
       if (!listOutput.equals(expectedListOutput)) {
-        System.out.println("The ArrayList of Birthdays is wrong!");
-        return false;
+        fail("The ArrayList of Birthdays is wrong!");
       }
 
     }
 
-    return true; // return true if all tests pass
   }
 
 
@@ -962,7 +947,8 @@ public class testBirthdaySearchTool {
    * 
    * @return true if all tests pass, false if otherwise
    */
-  public static boolean testFrontEnd() {
+  @Test
+  public void testFrontEnd() {
 
     // create a String variable to store whose front end is running
     String backend = "";
@@ -1009,8 +995,7 @@ public class testBirthdaySearchTool {
 
     // ensures that the output of the console is correct
     if (actualOutput.contains("Invalid")) {
-      System.out.println("A valid csv file could not be loaded successfully!");
-      return false;
+      fail("A valid csv file could not be loaded successfully!");
     }
 
 
@@ -1057,8 +1042,46 @@ public class testBirthdaySearchTool {
     // ensures that the output of the console is correct
     if (actual.contains("not added") || actual.contains("malformed")
       || actual.contains("already added")) {
-      System.out.println("A valid birthday could not be added!");
-      return false;
+      fail("A valid birthday could not be added!");
+    }
+
+
+
+    // Test loadCSV() with an invalid file name to ensure it cannot load it
+
+
+    // create input with an invalid file name
+    input = new Scanner("bdaylist.csv\nq");
+
+    // create a new PrintStream object to get the prior output to the console
+    oldConsoleStream = new PrintStream(System.out);
+
+    // create a new console that will be able to collect the standard input to the console
+
+    // creates a new buffer or console where the data that is going to be outputted is stored
+    newConsoleByteArray = new ByteArrayOutputStream();
+    // creates PrintStream Object to get the data that is going to be outputted to the console
+    newConsoleStream = new PrintStream(newConsoleByteArray);
+    // sets the new standard output to a new PrintStream whose output is going to be collected
+    System.setOut(newConsoleStream);
+
+    // passes simulated user input to addBirthday() to try and add valid birthday
+    frontEnd.loadCSV(input);
+
+    // put the outputted data from the front end into the old print stream using System.out
+    oldConsoleStream.append(newConsoleByteArray.toString());
+
+    // stop using the new standard ouutput stream and go back to using System.out
+    System.setOut(oldConsoleStream);
+
+    // put the outputted text to the console into a string
+    actual = newConsoleByteArray.toString();
+    // remove the newline from the outputted text
+    actual = actual.substring(0, actual.length() - 2);
+
+    // ensures that the output of the console is correct
+    if (!actual.contains("Returning")) {
+      fail("An invalid file could be loaded!");
     }
 
 
@@ -1097,8 +1120,46 @@ public class testBirthdaySearchTool {
 
     // ensures that the output of the console is correct
     if (actual.contains("Sorry!")) {
-      System.out.println("A valid name with a birthday could not be searched for!");
-      return false;
+      fail("A valid name with a birthday could not be searched for!");
+    }
+
+
+
+    // Test search() when searching for a invalid name with an associated birthdate in the tree
+
+
+    // input is the same for both front ends so create only one new scanner
+    input = new Scanner("n\nJohn\naaaaaaaa\n");
+
+    // create a new PrintStream object to get the prior output to the console
+    oldConsoleStream = new PrintStream(System.out);
+
+    // create a new console that will be able to collect the standard input to the console
+
+    // creates a new buffer or console where the data that is going to be outputted is stored
+    newConsoleByteArray = new ByteArrayOutputStream();
+    // creates PrintStream Object to get the data that is going to be outputted to the console
+    newConsoleStream = new PrintStream(newConsoleByteArray);
+    // sets the new standard output to a new PrintStream whose output is going to be collected
+    System.setOut(newConsoleStream);
+
+    // passes simulated user input to addBirthday() to try and add valid birthday
+    frontEnd.search(input);
+
+    // put the outputted data from the front end into the old print stream using System.out
+    oldConsoleStream.append(newConsoleByteArray.toString());
+
+    // stop using the new standard ouutput stream and go back to using System.out
+    System.setOut(oldConsoleStream);
+
+    // put the outputted text to the console into a string
+    actual = newConsoleByteArray.toString();
+    // remove the newline from the outputted text
+    actual = actual.substring(0, actual.length() - 2);
+
+    // ensures that the output of the console is correct
+    if (!actual.contains("not found") && !actual.contains("not find")) {
+      fail("An invalid name with a birthday could be searched for!");
     }
 
 
@@ -1136,8 +1197,51 @@ public class testBirthdaySearchTool {
 
     // ensures that the output of the console is correct
     if (actual.contains("Sorry!")) {
-      System.out.println("A valid birthdate could not be searched for!");
-      return false;
+      fail("A valid birthdate could not be searched for!");
+    }
+
+
+
+    
+    // Test search() when searching for a invalid birthdate in the tree
+
+    
+    // assign the input based upon whose front end we are using
+    if (backend.contains("Matt")) {
+      input = new Scanner("d\n0001\n00\n00\n00\n00\n");
+    } else {
+      input = new Scanner("d\n0001\n00\n00\n00\n00\nq");
+    }
+
+    // create a new PrintStream object to get the prior output to the console
+    oldConsoleStream = new PrintStream(System.out);
+
+    // create a new console that will be able to collect the standard input to the console
+
+    // creates a new buffer or console where the data that is going to be outputted is stored
+    newConsoleByteArray = new ByteArrayOutputStream();
+    // creates PrintStream Object to get the data that is going to be outputted to the console
+    newConsoleStream = new PrintStream(newConsoleByteArray);
+    // sets the new standard output to a new PrintStream whose output is going to be collected
+    System.setOut(newConsoleStream);
+
+    // passes simulated user input to addBirthday() to try and add valid birthday
+    frontEnd.search(input);
+
+    // put the outputted data from the front end into the old print stream using System.out
+    oldConsoleStream.append(newConsoleByteArray.toString());
+
+    // stop using the new standard ouutput stream and go back to using System.out
+    System.setOut(oldConsoleStream);
+
+    // put the outputted text to the console into a string
+    actual = newConsoleByteArray.toString();
+    // remove the newline from the outputted text
+    actual = actual.substring(0, actual.length() - 2);
+
+    // ensures that the output of the console is correct
+    if (!actual.contains("no birthday") && !actual.contains("Try again")) {
+      fail("An invalid birthdate could be searched for!");
     }
 
 
@@ -1180,8 +1284,7 @@ public class testBirthdaySearchTool {
 
     // ensures that the output of the console is correct
     if (actual.contains("no birthdays")) {
-      System.out.println("There were no birthdays in a valid range containing birthdays!");
-      return false;
+      fail("There were no birthdays in a valid range containing birthdays!");
     }
 
 
@@ -1225,11 +1328,9 @@ public class testBirthdaySearchTool {
 
     // ensures that the output of the console is correct
     if (actual.contains("Nobody")) {
-      System.out.println("There should be at least one birthday today!");
-      return false;
+      fail("There should be at least one birthday today!");
     }
 
-    return true; // return true if all tests pass
   }
 
 }
