@@ -7,7 +7,7 @@
 // Lecturer: Gary Dahl
 // Notes to Grader: NONE
 
-import java.util.Date;
+import java.util.ArrayList;
 
 /**
  * This class contains the entire program that tests the files and respective methods within the BST
@@ -541,15 +541,16 @@ public class testBirthdaySearchTool {
   }
 
   /**
-   * This test method ensures that the creation of a BirthdayTree is correct along with the methods
-   * associated with the tree. More specifically, this method ensures that the insert method inserts
-   * nodes in the correct position and furthermore ensures that the list of birthday s TODO:
+   * This test method ensures that the creation of a BirthdayTree is correct along with some of the
+   * methods associated with the tree. More specifically, this method ensures that the insert method
+   * inserts nodes in the correct position, colors and balances the nodes correctly, and furthermore
+   * ensures that the list of birthdays is correct.
    * 
    * @return true if all tests pass, false if otherwise
    */
-  public static boolean testBirthdayTree() {
+  public static boolean testBirthdayTreeCreation() {
 
-    { // Test 1 - ensures that a simple Red Black Tree can be created
+    { // Test 1 - ensures that a simple valid Red Black Tree can be created
 
       // creates a new BirthdayTree Object
       BirthdayTree tree = new BirthdayTree();
@@ -568,21 +569,255 @@ public class testBirthdaySearchTool {
 
       // tries to create new Birthday Objects
       try {
-        birthday1 = new Birthday("1990/01/01", "Patrick", "Harvey"); // --
-        birthday2 = new Birthday("1991/01/02", "Charleton", "Heston"); // --
-        birthday3 = new Birthday("1992/01/03", "Edward", "Bryant"); // --
-        birthday4 = new Birthday("1993/01/04", "Bean", "And Cream"); // --
-        birthday5 = new Birthday("1994/01/05", "Jerry", "Riva"); // --
-        birthday6 = new Birthday("1995/01/06", "Jeb", "Bush"); // --
-        birthday7 = new Birthday("1996/01/07", "Becky", "Bank"); // --
-        birthday8 = new Birthday("1997/01/08", "Mrs", "Bungus"); // --
-        birthday9 = new Birthday("1998/01/09", "Steve", "Jeffry"); // --
-        birthday10 = new Birthday("1999/01/10", "Baggie", "Beach"); // --
+        birthday1 = new Birthday("1990/01/01", "Patrick", "Harvey");
+        birthday2 = new Birthday("1991/01/02", "Charleton", "Heston");
+        birthday3 = new Birthday("1992/01/03", "Edward", "Bryant");
+        birthday4 = new Birthday("1993/01/04", "Bean", "And Cream");
+        birthday5 = new Birthday("1994/01/05", "Jerry", "Riva");
+        birthday6 = new Birthday("1995/01/06", "Jeb", "Bush");
+        birthday7 = new Birthday("1996/01/07", "Becky", "Bank");
+        birthday8 = new Birthday("1997/01/08", "Mrs", "Bungus");
+        birthday9 = new Birthday("1998/01/09", "Steve", "Jeffry");
+        birthday10 = new Birthday("1999/01/10", "Baggie", "Beach");
       } catch (IllegalBirthdayFormatException e) {
+        System.out.println(e.getMessage());
+        return false; // all of these Birthday Objects should be valid input
+      }
+
+      // tries to add valid Birthday Objects to the BirthdayTree
+      if (!tree.addBirthday(birthday4)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday7)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday3)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday1)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday10)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday8)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday6)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday2)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday5)) {
+        return false;
+      }
+      if (!tree.addBirthday(birthday9)) {
+        return false;
+      }
+
+      // ensures that the Birthday Objects are in the correct position and are the correct color
+      if (!tree.getRoot().data.toString()
+        .equals("Bean And Cream: Monday January 04, 1993 @ 00:00 AM") && !tree.getRoot().isBlack) {
+        System.out.println("WRONG ROOT");
+        return false;
+      }
+      if (!tree.getRoot().leftChild.data.toString()
+        .equals("Charleton Heston: Wednesday January 02, 1991 @ 00:00 AM")
+        && !tree.getRoot().leftChild.isBlack) {
+        System.out.println("WRONG LEFTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.data.toString()
+        .equals("Mrs Bungus: Wednesday January 08, 1997 @ 00:00 AM")
+        && tree.getRoot().rightChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().leftChild.leftChild.data.toString()
+        .equals("Patrick Harvey: Monday January 01, 1990 @ 00:00 AM")
+        && tree.getRoot().leftChild.leftChild.isBlack) {
+        System.out.println("WRONG LEFTCHILD LEFTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().leftChild.rightChild.data.toString()
+        .equals("Edward Bryant: Friday January 03, 1992 @ 00:00 AM")
+        && tree.getRoot().leftChild.rightChild.isBlack) {
+        System.out.println("WRONG LEFTCHILD RIGHTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.rightChild.data.toString()
+        .equals("Baggie Beach: Sunday January 10, 1999 @ 00:00 AM")
+        && !tree.getRoot().rightChild.rightChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD RIGHTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.leftChild.data.toString()
+        .equals("Jeb Bush: Friday January 06, 1995 @ 00:00 AM")
+        && !tree.getRoot().rightChild.leftChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD LEFTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.leftChild.leftChild.data.toString()
+        .equals("Jerry Riva: Wednesday January 05, 1994 @ 00:00 AM")
+        && tree.getRoot().rightChild.leftChild.leftChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD LEFTCHILD LEFTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.leftChild.rightChild.data.toString()
+        .equals("Becky Bank: Sunday January 07, 1996 @ 00:00 AM")
+        && tree.getRoot().rightChild.leftChild.rightChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD LEFTCHILD RIGHTCHILD");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.rightChild.leftChild.data.toString()
+        .equals("Steve Jeffry: Friday January 09, 1998 @ 00:00 AM")
+        && tree.getRoot().rightChild.rightChild.leftChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD RIGHTCHILD LEFTCHILD");
+        return false;
+      }
+
+      // ensures that the size of the BirthdayTree is correct
+      if (tree.getSize() != 10) {
+        System.out.println("The size of the tree is wrong!");
+        return false;
+      }
+
+      // ensures that the list of the BirthdayTree or the ArrayList of Birthday Objects is correct
+      String listOutput = tree.getList().toString();
+      String expectedListOutput =
+        "[Bean And Cream: Monday January 04, 1993 @ 00:00 AM, Becky Bank: Sunday January 07, 1996 "
+          + "@ 00:00 AM, Edward Bryant: Friday January 03, 1992 @ 00:00 AM, Patrick Harvey: Monday "
+          + "January 01, 1990 @ 00:00 AM, Baggie Beach: Sunday January 10, 1999 @ 00:00 AM, Mrs "
+          + "Bungus: Wednesday January 08, 1997 @ 00:00 AM, Jeb Bush: Friday January 06, 1995 "
+          + "@ 00:00 AM, Charleton Heston: Wednesday January 02, 1991 @ 00:00 AM, Jerry Riva: "
+          + "Wednesday January 05, 1994 @ 00:00 AM, Steve Jeffry: Friday January 09, 1998 @ 00:00 "
+          + "AM]";
+      if (!listOutput.equals(expectedListOutput)) {
+        System.out.println("The ArrayList of Birthdays is wrong!");
+        return false;
+      }
+
+    }
+
+    { // Test 2 - ensures that an invalid Red Black Tree throws appropriate exceptions
+
+      // creates a new BirthdayTree Object
+      BirthdayTree tree = new BirthdayTree();
+
+      // creates empty Birthday Objects
+      Birthday birthday1 = null;
+      Birthday birthday2 = null;
+      Birthday birthday3 = null;
+      Birthday birthday4 = null;
+
+      // creates new Birthday Objects
+      try {
+        birthday1 = new Birthday("1990/01/01", "Patrick", "Harvey");
+        birthday2 = new Birthday("1991/01/02", "Charleton", "Heston");
+        birthday3 = new Birthday("1991/01/02", "Edward", "Bryant");
+      } catch (IllegalBirthdayFormatException e) {
+        System.out.println(e.getMessage());
+        return false; // all of these Birthday Objects should be "valid" input when not in the tree
+      }
+
+      // ensures that two objects with the same birthdate cannot be added to the tree
+      try {
+        tree.addBirthday(birthday1);
+        tree.addBirthday(birthday2);
+        tree.addBirthday(birthday3); // this birthdate is the exact same as birthday2
+        // TODO:
+        return false; // if two objects with the same birthdate can be added to the tree
+      } catch (BirthdayAlreadyAddedException e) {
         System.out.println(e.getMessage());
       }
 
-      // adds the Birthday Objects to the BirthdayTree
+      // ensures that you cannot add a null Birthday Object or null reference in general to the tree
+      if (tree.addBirthday(birthday4)) {
+        System.out.println("Could add a null Birthday Object to the tree which is wrong!");
+        return false;
+      }
+      if (tree.addBirthday(null)) {
+        System.out.println("Could add a null reference to the tree which is wrong!");
+        return false;
+      }
+
+      // ensures that the Birthday Objects are in the correct position and are the correct color
+      if (!tree.getRoot().data.toString()
+        .equals("Patrick Harvey: Monday January 01, 1990 @ 00:00 AM") && !tree.getRoot().isBlack) {
+        System.out.println("WRONG ROOT");
+        return false;
+      }
+      if (!tree.getRoot().rightChild.data.toString()
+        .equals("Charleton Heston: Wednesday January 02, 1991 @ 00:00 AM")
+        && tree.getRoot().rightChild.isBlack) {
+        System.out.println("WRONG RIGHTCHILD");
+        return false;
+      }
+
+      // ensures that the size of the BirthdayTree is correct
+      if (tree.getSize() != 2) {
+        System.out.println("The size of the tree is wrong!");
+        return false;
+      }
+
+      // ensures that the list of the BirthdayTree or the ArrayList of Birthday Objects is correct
+      String listOutput = tree.getList().toString();
+      String expectedListOutput = "[Patrick Harvey: Monday January 01, 1990 @ 00:00 AM, Charleton "
+        + "Heston: Wednesday January 02, 1991 @ 00:00 AM]";
+      if (!listOutput.equals(expectedListOutput)) {
+        System.out.println("The ArrayList of Birthdays is wrong!");
+        return false;
+      }
+
+    }
+
+    return true; // return true if all tests pass
+  }
+
+  /**
+   * This test method ensures that all of the Birthday Objects within the Red Black Tree or
+   * BirthdayTree are removed correctly.
+   * 
+   * @return true if all tests pass, false if otherwise
+   */
+  public static boolean testClear() {
+
+    { // Test 1 - clears a simple valid Red Black Tree
+
+      // creates a new BirthdayTree Object
+      BirthdayTree tree = new BirthdayTree();
+
+      // creates empty Birthday Objects
+      Birthday birthday1 = null;
+      Birthday birthday2 = null;
+      Birthday birthday3 = null;
+      Birthday birthday4 = null;
+      Birthday birthday5 = null;
+      Birthday birthday6 = null;
+      Birthday birthday7 = null;
+      Birthday birthday8 = null;
+      Birthday birthday9 = null;
+      Birthday birthday10 = null;
+
+      // tries to create new Birthday Objects
+      try {
+        birthday1 = new Birthday("1990/01/01", "Patrick", "Harvey");
+        birthday2 = new Birthday("1991/01/02", "Charleton", "Heston");
+        birthday3 = new Birthday("1992/01/03", "Edward", "Bryant");
+        birthday4 = new Birthday("1993/01/04", "Bean", "And Cream");
+        birthday5 = new Birthday("1994/01/05", "Jerry", "Riva");
+        birthday6 = new Birthday("1995/01/06", "Jeb", "Bush");
+        birthday7 = new Birthday("1996/01/07", "Becky", "Bank");
+        birthday8 = new Birthday("1997/01/08", "Mrs", "Bungus");
+        birthday9 = new Birthday("1998/01/09", "Steve", "Jeffry");
+        birthday10 = new Birthday("1999/01/10", "Baggie", "Beach");
+      } catch (IllegalBirthdayFormatException e) {
+        System.out.println(e.getMessage());
+        return false; // all of these Birthday Objects should be valid input
+      }
+
+      // adds valid Birthday Objects to the BirthdayTree
       tree.addBirthday(birthday4);
       tree.addBirthday(birthday7);
       tree.addBirthday(birthday3);
@@ -594,58 +829,42 @@ public class testBirthdaySearchTool {
       tree.addBirthday(birthday5);
       tree.addBirthday(birthday9);
 
-      // ensures that the Birthday Objects are in the correct position and are the correct color
-      if (!tree.getRoot().data.toString()
-        .equals("Bean And Cream: Monday January 04, 1993 @ 00:00 AM") || !tree.getRoot().isBlack) {
-        System.out.println("WRONG ROOT");
+      // ensures that these Birthday Objects can be cleared from the BirthdayTree
+
+      // clears the BirthdayTree
+      tree.clear();
+
+      // ensures that the size of an empty tree is zero
+      if (tree.getSize() != 0) {
+        System.out.println("The size of an empty BirthdayTree should be 0!");
+        return false;
       }
-      if (!tree.getRoot().leftChild.data.toString()
-        .equals("Charleton Heston: Wednesday January 02, 1991 @ 00:00 AM")
-        || !tree.getRoot().leftChild.isBlack) {
-        System.out.println("WRONG LEFTCHILD");
+
+      // ensures that the root node of the empty tree is null
+      if (tree.getRoot() != null) {
+        System.out.println("The root node of an empty tree should be null!");
+        return false;
       }
-      if (!tree.getRoot().rightChild.data.toString()
-        .equals("Mrs Bungus: Wednesday January 08, 1997 @ 00:00 AM")
-        || tree.getRoot().rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD");
-      }
-      if (!tree.getRoot().leftChild.leftChild.data.toString()
-        .equals("Patrick Harvey: Monday January 01, 1990 @ 00:00 AM")
-        || tree.getRoot().leftChild.leftChild.isBlack) {
-        System.out.println("WRONG LEFTCHILD LEFTCHILD");
-      }
-      if (!tree.getRoot().leftChild.rightChild.data.toString()
-        .equals("Edward Bryant: Friday January 03, 1992 @ 00:00 AM")
-        || tree.getRoot().leftChild.rightChild.isBlack) {
-        System.out.println("WRONG LEFTCHILD RIGHTCHILD");
-      }
-      if (!tree.getRoot().rightChild.rightChild.data.toString()
-        .equals("Baggie Beach: Sunday January 10, 1999 @ 00:00 AM")
-        || !tree.getRoot().rightChild.rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD RIGHTCHILD");
-      }
-      if (!tree.getRoot().rightChild.leftChild.data.toString()
-        .equals("Jeb Bush: Friday January 06, 1995 @ 00:00 AM")
-        || !tree.getRoot().rightChild.leftChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD LEFTCHILD");
-      }
-      if (!tree.getRoot().rightChild.leftChild.leftChild.data.toString()
-        .equals("Jerry Riva: Wednesday January 05, 1994 @ 00:00 AM")
-        || tree.getRoot().rightChild.leftChild.leftChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD LEFTCHILD LEFTCHILD");
-      }
-      if (!tree.getRoot().rightChild.leftChild.rightChild.data.toString()
-        .equals("Becky Bank: Sunday January 07, 1996 @ 00:00 AM")
-        || tree.getRoot().rightChild.leftChild.rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD LEFTCHILD RIGHTCHILD");
-      }
-      if (!tree.getRoot().rightChild.rightChild.leftChild.data.toString()
-        .equals("Steve Jeffry: Friday January 09, 1998 @ 00:00 AM")
-        || tree.getRoot().rightChild.rightChild.leftChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD RIGHTCHILD LEFTCHILD");
+
+      // ensures that the ArrayList of the BirthdayTree is empty
+      String listOutput = tree.getList().toString();
+      String expectedListOutput = "[]";
+      if (!listOutput.equals(expectedListOutput)) {
+        System.out.println("The ArrayList of Birthdays is wrong!");
+        return false;
       }
 
     }
+
+    { // Test 2 - clears a Red Black Tree after tying to add invalid Birthday Objects
+
+    }
+
+    { // Test 3 - clears an empty Red Black Tree
+
+    }
+
+
 
     return true; // return true if all tests pass
   }
@@ -659,14 +878,14 @@ public class testBirthdaySearchTool {
   public static void main(String[] args) {
     System.out.println(testLoadFile());
     System.out.println(testBirthdayObject());
-    System.out.println(testBirthdayTree());
+    System.out.println(testBirthdayTreeCreation());
+    System.out.println(testClear());
 
 
   }
 
   // testListBirthday() // ensure that the Red/Black tree lists the correct birthdays in the correct
   // order
-  // testInsertBirthday() // ensures RB tree inserts birthday into correct position after balancing
   // testClear() // ensures that all of the BirthdayObjects within the RB tree are removed correctly
   // testPrintTodaysBirthdays() // ensures that the list of birthdays on the current date is correct
   // testPrintBirthdaysInRange() // ensures that list of birthdays within range is correct
