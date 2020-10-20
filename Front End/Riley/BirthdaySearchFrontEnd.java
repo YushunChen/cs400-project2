@@ -38,50 +38,52 @@ public class BirthdaySearchFrontEnd {
         System.out.println("Here is a list of commands available to you: ");
         printUserCommands();
     }
-    
+
     /**
      * Load a csv file of birthdays into the tree.
+     * 
      * @param input the user input to get data for operation from
      */
-    public static void loadCSV(Scanner input){
+    public static void loadCSV(Scanner input) {
         System.out.println("Enter csv file name or type q to return to menu:");
         String fileName = "";
         boolean success = false;
         // while file hasn't been successfully loaded or the user hasn't quit
-        while(!(success || fileName.equals("q"))){
+        while (!(success || fileName.equals("q"))) {
             fileName = input.nextLine().trim().toLowerCase();
             // check for quit command
-            if(fileName.equals("q")){
+            if (fileName.equals("q")) {
                 System.out.println("Returning to menu.");
                 break;
             }
             // check for bad file extensions
-            else if(!fileName.contains(".csv")){
+            else if (!fileName.contains(".csv")) {
                 System.out.println("Invalid file name. Must be a csv. Try again.");
-            }
-            else{
+            } else {
                 // success if works
-                if(birthdayTree.loadBirthdaysFromReader(fileName)){
+                if (birthdayTree.loadBirthdaysFromReader(fileName)) {
                     success = true;
                     System.out.println("CSV file loaded successfully.");
                 }
                 // if file contents invalid, etc., then retry.
-                else{
+                else {
                     System.out.println("Something went wrong. Try again or type quit(q) to return to menu.");
                 }
             }
         }
     }
+
     /**
-     * Adds a birthday object to the birthday tree
-     * Birthday object should have the following form for concise search:
-     * Long Format for birthday: "yyyy/MM/dd/HH/mm"
+     * Adds a birthday object to the birthday tree Birthday object should have the
+     * following form for concise search: Long Format for birthday:
+     * "yyyy/MM/dd/HH/mm"
+     * 
      * @param input the user input to get data for operation from
      */
-    public static void addBirthday(Scanner input){
+    public static void addBirthday(Scanner input) {
         boolean success = false;
         String date = "";
-        while(!success){
+        while (!success) {
             // get the first and last name of the person
             System.out.println("Enter first name of the desired person to add:");
             String firstName = input.nextLine().trim();
@@ -89,19 +91,23 @@ public class BirthdaySearchFrontEnd {
             String lastName = input.nextLine().trim();
             // get the date of the birthday
             date = getBirthDate(input);
+            if (date == null) {
+                userQuitMessage();
+                return;
+            }
             Birthday birthday;
             // try putting it all together in an object
-            try{birthday = new Birthday(date, firstName, lastName);}
-            catch(IllegalBirthdayFormatException e){
+            try {
+                birthday = new Birthday(date, firstName, lastName);
+            } catch (IllegalBirthdayFormatException e) {
                 System.out.println("The date of that birthday was malformed");
                 return;
             }
             // try adding it to the tree, or catch the duplicate error and exit
-            try{
+            try {
                 birthdayTree.addBirthday(birthday);
                 success = true;
-            }
-            catch (BirthdayAlreadyAddedException e){
+            } catch (BirthdayAlreadyAddedException e) {
                 System.out.println("That birthday was already added. Exiting back to menu.");
                 break;
             }
@@ -110,98 +116,127 @@ public class BirthdaySearchFrontEnd {
     }
 
     /**
-     * Helper method to get the date to be converted into birthday object.
-     * Checks to make sure all values are in correct range and in proper format.
+     * Helper method to get the date to be converted into birthday object. Checks to
+     * make sure all values are in correct range and in proper format.
+     * 
      * @param input the user input to get data for operation from
      * @return
      */
-    private static String getBirthDate(Scanner input){
+    private static String getBirthDate(Scanner input) {
         boolean success = false;
         String date = "";
         // taken from the Birthday.java file
         Pattern pattern = Pattern.compile("[0-9]{4}/[0-9]{2}/[0-9]{2}/[0-9]{2}/[0-9]{2}");
-        while(!success){
+        while (!success) {
             // get each date component
             System.out.println("Enter the year in format 'YYYY':");
             String year = input.nextLine().trim();
-            System.out.println("Enter the year in format 'MM':");
+            // check for user quitting
+            if (year.equals("q")) {
+                return null;
+            }
+            System.out.println("Enter the month in format 'MM':");
             String month = input.nextLine().trim();
-            System.out.println("Enter the year in format 'DD':");
+            // check for user quitting
+            if (month.equals("q")) {
+                return null;
+            }
+            System.out.println("Enter the day in format 'DD':");
             String day = input.nextLine().trim();
-            System.out.println("Enter the year in format 'HH':");
+            // check for user quitting
+            if (day.equals("q")) {
+                return null;
+            }
+            System.out.println("Enter the hour in format 'HH':");
             String hour = input.nextLine().trim();
-            System.out.println("Enter the year in format 'mm':");
+            // check for user quitting
+            if (hour.equals("q")) {
+                return null;
+            }
+            System.out.println("Enter the minute in format 'mm':");
             String min = input.nextLine().trim();
+            // check for user quitting
+            if (min.equals("q")) {
+                return null;
+            }
             // var for making sure values are in proper ranges
             boolean checkedValues = false;
             // var for making sure the date is properly formatted
             boolean matched = false;
             try {
-                // year can be anything, so just check the other ones to make sure they make sense
+                // year can be anything, so just check the other ones to make sure they make
+                // sense
                 int monthInt = Integer.parseInt(month);
                 int dayInt = Integer.parseInt(day);
                 int hourInt = Integer.parseInt(hour);
                 int minInt = Integer.parseInt(min);
                 // ranges: month-[1, 12], day-[1,31], hour-[0,23](24 hr time), min-[0,59]
-                if (1<=monthInt && monthInt<=12 && 1<=dayInt && dayInt<=31 &&
-                        0<=hourInt && hourInt<=23 && 0<=minInt && minInt<=59){
+                if (1 <= monthInt && monthInt <= 12 && 1 <= dayInt && dayInt <= 31 && 0 <= hourInt && hourInt <= 23
+                        && 0 <= minInt && minInt <= 59) {
                     checkedValues = true;
                     date = year + "/" + month + "/" + day + "/" + hour + "/" + min;
                     Matcher format = pattern.matcher(date);
                     matched = format.matches();
                 }
-            }
-            catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("One of the fields entered was invalid. Try again.");
             }
             success = matched && checkedValues;
-            if(!success){
+            if (!success) {
                 System.out.println("One of the fields entered was invalid. Try again.");
             }
+            System.out.println("If you would like to quit, type q into any of the fields");
         }
         return date;
     }
 
     /**
      * Searches the tree for a birthday object based on a given date
+     * 
      * @param input the user input to get data for operation from
      */
-    public static void search(Scanner input){
+    public static void search(Scanner input) {
         Birthday birthday = null;
         System.out.println("Would you like to search by name(n) or by date(d)?");
         String temp = input.nextLine().trim().toLowerCase();
-        while(!(temp.equals("d") || temp.equals("n"))){
+        while (!(temp.equals("d") || temp.equals("n"))) {
             System.out.println("That was not a valid option. Try n for name or d for date.");
             temp = input.nextLine().trim().toLowerCase();
         }
-        if (temp.equals("d")){
+        if (temp.equals("d")) {
             // search by date
             String date = getBirthDate(input);
-            try{
+            if (date == null) {
+                userQuitMessage();
+                return;
+            }
+            try {
                 birthday = birthdayTree.searchBirthday(date);
             }
-            // we will handle the not found at the end of the method for both options to keep code DRY
-            catch (BirthdayNotFoundException e){}
-        }
-        else{
+            // we will handle the not found at the end of the method for both options to
+            // keep code DRY
+            catch (BirthdayNotFoundException e) {
+            }
+        } else {
             // search by name
             System.out.println("Enter first name of the desired person to search for:");
             String firstName = input.nextLine().trim();
             System.out.println("Enter last name of the desired person to search for:");
             String lastName = input.nextLine().trim();
-            try{
+            try {
                 birthday = birthdayTree.searchName(firstName, lastName);
             }
-            // we will handle the not found at the end of the method for both options to keep code DRY
-            catch (BirthdayNotFoundException e){}
+            // we will handle the not found at the end of the method for both options to
+            // keep code DRY
+            catch (BirthdayNotFoundException e) {
+            }
         }
-        if(birthday!=null){
+        if (birthday != null) {
             System.out.println("Here is the information about the desired birthday: ");
             System.out.println("First name: " + birthday.getFirstName());
             System.out.println("Last name: " + birthday.getLastName());
             System.out.println("Birthday: " + birthday.getBirthday());
-        }
-        else{
+        } else {
             System.out.println("That birthday/person was not found in the tree. Returning to menu.");
         }
 
@@ -209,25 +244,26 @@ public class BirthdaySearchFrontEnd {
 
     /**
      * Clears the current birthday tree by removing all birthday objects from it
+     * 
      * @param input the user input to get data for operation from
      */
-    public static void clear(Scanner input){
+    public static void clear(Scanner input) {
         // Confirm that they want to delete their tree
         System.out.println("Are you sure you want to clear the birthday tree (y or n)?");
         boolean clear = yesNoInput(input);
-        if(clear){
+        if (clear) {
             birthdayTree.clear();
             System.out.println("The birthday tree has been succesfully cleared.");
-        }
-        else
+        } else
             System.out.println("Okay. Returning to menu.");
     }
 
     /**
      * Prints the birthday objects in the date range given by user.
+     * 
      * @param input the user input to get data for operation from
      */
-    public static void printBirthdaysInRange(Scanner input){
+    public static void printBirthdaysInRange(Scanner input) {
         // get the start and end birthday objects for the range
         String startDate = "";
         String endDate = "";
@@ -235,14 +271,17 @@ public class BirthdaySearchFrontEnd {
         ArrayList<Birthday> inRange = new ArrayList<>();
         startDate = getBirthDate(input);
         endDate = getBirthDate(input);
-        // try creating bday objects for range, if error then a bad date was entered and just start over at menu
-        try{start = new Birthday(startDate, "Kakashi", "Hatake");}
-        catch(IllegalBirthdayFormatException e){
+        // try creating bday objects for range, if error then a bad date was entered and
+        // just start over at menu
+        try {
+            start = new Birthday(startDate, "Kakashi", "Hatake");
+        } catch (IllegalBirthdayFormatException e) {
             System.out.println("The start date was malformed. Returning to menu.");
             return;
         }
-        try{end = new Birthday(endDate, "Sasuke", "Uchiha");}
-        catch(IllegalBirthdayFormatException e){
+        try {
+            end = new Birthday(endDate, "Sasuke", "Uchiha");
+        } catch (IllegalBirthdayFormatException e) {
             System.out.println("The end date was malformed. Returning to menu.");
             return;
         }
@@ -250,14 +289,14 @@ public class BirthdaySearchFrontEnd {
         // if start.compareTo(b) is not 1, b is greater than or equal to that date
         // and if end.compareTo(b) is not -1, b is less than or equal to that date
         // So, putting these together shows it's in range
-        for(Birthday b: birthdayTree.getList()){
-            if(start.compareTo(b) != 1 && end.compareTo(b) != -1)
+        for (Birthday b : birthdayTree.getList()) {
+            if (start.compareTo(b) != 1 && end.compareTo(b) != -1)
                 inRange.add(b);
         }
-        if(inRange.size() == 0)
+        if (inRange.size() == 0)
             System.out.println("There were no birthdays in that range.");
-        else{
-            for(Birthday b: inRange){
+        else {
+            for (Birthday b : inRange) {
                 System.out.println(b.toString());
             }
         }
@@ -267,8 +306,8 @@ public class BirthdaySearchFrontEnd {
     /**
      * List all of the birthdays currently stored in the tree.
      */
-    public static void list(){
-        if(birthdayTree.getSize() == 0)
+    public static void list() {
+        if (birthdayTree.getSize() == 0)
             System.out.println("There are currently no items in the birthday tree.");
         else
             birthdayTree.list();
@@ -277,7 +316,7 @@ public class BirthdaySearchFrontEnd {
     /**
      * Prints all of the birthdays in the tree taking place today.
      */
-    public static void birthdaysToday(){
+    public static void birthdaysToday() {
         ZoneId zoneId = ZoneId.of("America/Montreal");
         // get the current day and month
         LocalDate localDate = LocalDate.now(zoneId);
@@ -285,19 +324,26 @@ public class BirthdaySearchFrontEnd {
         int day = localDate.getDayOfMonth();
         System.out.println("Getting birthdays for: " + localDate);
         ArrayList<Birthday> todayBdays = new ArrayList<>();
-        for(Birthday b : birthdayTree.getList()){
-            if(b.getBirthday().getMonth()+1 == month && 
-                b.getBirthday().getDate() == day){
-                    todayBdays.add(b);
-                }
+        for (Birthday b : birthdayTree.getList()) {
+            if (b.getBirthday().getMonth() + 1 == month && b.getBirthday().getDate() == day) {
+                todayBdays.add(b);
+            }
         }
-        if(todayBdays.size() == 0)
+        if (todayBdays.size() == 0)
             System.out.println("No people in the birthday tree have today as their birthday.");
-        else{
-            for(Birthday b: todayBdays){
+        else {
+            for (Birthday b : todayBdays) {
                 System.out.println(b.toString());
             }
         }
+    }
+
+    /**
+     * Helper method that lets the user know they successfully quit out of the
+     * program.
+     */
+    private static void userQuitMessage() {
+        System.out.println("Now quitting back to main menu.");
     }
 
     /**
@@ -318,12 +364,13 @@ public class BirthdaySearchFrontEnd {
 
     /**
      * Helper method that makes it easy to ask user yes/no questions
+     * 
      * @param input the user input to get data operation from
      * @return true if user answers yes, false if user answers no
      */
-    private static boolean yesNoInput(Scanner input){
+    private static boolean yesNoInput(Scanner input) {
         String in = input.nextLine().trim().toLowerCase();
-        while (!(in.equals("y") || in.equals("n"))){
+        while (!(in.equals("y") || in.equals("n"))) {
             System.out.println("Please enter either yes(y) or no(n)");
             in = input.nextLine().trim().toLowerCase();
         }
@@ -332,9 +379,10 @@ public class BirthdaySearchFrontEnd {
 
     /**
      * Runs the front end UI
+     * 
      * @param args
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         boolean inUse = true;
         welcome();
         Scanner input = new Scanner(System.in);
@@ -372,9 +420,7 @@ public class BirthdaySearchFrontEnd {
                     break;
                 default: // any other commands
                     System.out.println("That command is not valid. Try again.");
-          }
+            }
         }
-        
-
     }
 }
