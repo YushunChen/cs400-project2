@@ -7,7 +7,10 @@
 // Lecturer: Gary Dahl
 // Notes to Grader: NONE
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 /**
  * This class contains the entire program that tests the files and respective methods within the BST
@@ -858,15 +861,366 @@ public class testBirthdaySearchTool {
 
     { // Test 2 - clears a Red Black Tree after tying to add invalid Birthday Objects
 
+      // creates a new BirthdayTree Object
+      BirthdayTree tree = new BirthdayTree();
+
+      // creates empty Birthday Objects
+      Birthday birthday1 = null;
+      Birthday birthday2 = null;
+      Birthday birthday3 = null;
+      Birthday birthday4 = null;
+
+      // creates new Birthday Objects
+      try {
+        birthday1 = new Birthday("1990/01/01", "Patrick", "Harvey");
+        birthday2 = new Birthday("1991/01/02", "Charleton", "Heston");
+        birthday3 = new Birthday("1991/01/02", "Edward", "Bryant");
+      } catch (IllegalBirthdayFormatException e) {
+        System.out.println(e.getMessage());
+        return false; // all of these Birthday Objects should be "valid" input when not in the tree
+      }
+
+      // ensures that two objects with the same birthdate cannot be added to the tree
+      try {
+        tree.addBirthday(birthday1);
+        tree.addBirthday(birthday2);
+        tree.addBirthday(birthday3); // this birthdate is the exact same as birthday2
+        // TODO:
+        return false; // if two objects with the same birthdate can be added to the tree
+      } catch (BirthdayAlreadyAddedException e) {
+        System.out.println(e.getMessage());
+      }
+
+      // ensures that you cannot add a null Birthday Object or null reference in general to the tree
+      if (tree.addBirthday(birthday4)) {
+        System.out.println("Could add a null Birthday Object to the tree which is wrong!");
+        return false;
+      }
+      if (tree.addBirthday(null)) {
+        System.out.println("Could add a null reference to the tree which is wrong!");
+        return false;
+      }
+
+      // ensures that these Birthday Objects can be cleared from the BirthdayTree
+
+      // clears the BirthdayTree
+      tree.clear();
+
+      // ensures that the size of an empty tree is zero
+      if (tree.getSize() != 0) {
+        System.out.println("The size of an empty BirthdayTree should be 0!");
+        return false;
+      }
+
+      // ensures that the root node of the empty tree is null
+      if (tree.getRoot() != null) {
+        System.out.println("The root node of an empty tree should be null!");
+        return false;
+      }
+
+      // ensures that the ArrayList of the BirthdayTree is empty
+      String listOutput = tree.getList().toString();
+      String expectedListOutput = "[]";
+      if (!listOutput.equals(expectedListOutput)) {
+        System.out.println("The ArrayList of Birthdays is wrong!");
+        return false;
+      }
+
     }
 
     { // Test 3 - clears an empty Red Black Tree
 
+      // creates a new BirthdayTree Object
+      BirthdayTree tree = new BirthdayTree();
+
+      // clears the BirthdayTree
+      tree.clear();
+
+      // ensures that the size of an empty tree is zero
+      if (tree.getSize() != 0) {
+        System.out.println("The size of an empty BirthdayTree should be 0!");
+        return false;
+      }
+
+      // ensures that the root node of the empty tree is null
+      if (tree.getRoot() != null) {
+        System.out.println("The root node of an empty tree should be null!");
+        return false;
+      }
+
+      // ensures that the ArrayList of the BirthdayTree is empty
+      String listOutput = tree.getList().toString();
+      String expectedListOutput = "[]";
+      if (!listOutput.equals(expectedListOutput)) {
+        System.out.println("The ArrayList of Birthdays is wrong!");
+        return false;
+      }
+
     }
 
+    return true; // return true if all tests pass
+  }
 
+
+  /**
+   * TODO:
+   * 
+   * @return
+   */
+  public static boolean testFrontEnd() {
+
+    { // Test 1 - ensure that a valid CSV can be loaded from the front end
+
+      // create a new front end Object
+      BirthdaySearchFrontEnd frontEnd = new BirthdaySearchFrontEnd();
+
+      // create a scanner to pass input to the front end
+      Scanner input = new Scanner("birthdays.csv");
+
+      // create a new PrintStream object to get the prior output to the console
+      PrintStream oldConsoleStream = new PrintStream(System.out);
+
+      // create a new console that will be able to collect the standard input to the console
+
+      // creates a new buffer or console where the data that is going to be outputted is stored
+      ByteArrayOutputStream newConsoleByteArray = new ByteArrayOutputStream();
+      // creates PrintStream Object to get the data that is going to be outputted to the console
+      PrintStream newConsoleStream = new PrintStream(newConsoleByteArray);
+      // sets the new standard output to a new PrintStream whose output is going to be collected
+      System.setOut(newConsoleStream);
+
+      // passes simulated user input to loadCSV() to try and load a valid file
+      frontEnd.loadCSV(input);
+
+      // put the outputted data from the front end into the old print stream using System.out
+      oldConsoleStream.append(newConsoleByteArray.toString());
+
+      // stop using the new standard ouutput stream and go back to using System.out
+      System.setOut(oldConsoleStream);
+
+      // put the outputted text to the console into a string
+      String actualOutput = newConsoleByteArray.toString();
+      // remove the newline from the outputted text
+      actualOutput = actualOutput.substring(0, actualOutput.length() - 2);
+      // create String objects depending upon what the expected output is for each front end
+      String expectedOutputOne = "CSV file successfully loaded!";
+      String expectedOutputTwo = "CSV file loaded successfully.";
+
+      // ensures that the output of the console is correct
+      if (actualOutput.contains("Invalid")) {
+        System.out.println("A valid csv file could not be loaded successfully!");
+        return false;
+      }
+
+
+
+      if (actualOutput.contains("loaded!")) {
+        input = new Scanner("John\nCena\n1977\n04\n23\ny\n10\n11\ny");
+      } else {
+        input = new Scanner("John\nCena\n1977\n04\n23\n10\n11\n");
+      }
+
+      // create a new PrintStream object to get the prior output to the console
+      oldConsoleStream = new PrintStream(System.out);
+
+      // create a new console that will be able to collect the standard input to the console
+
+      // creates a new buffer or console where the data that is going to be outputted is stored
+      newConsoleByteArray = new ByteArrayOutputStream();
+      // creates PrintStream Object to get the data that is going to be outputted to the console
+      newConsoleStream = new PrintStream(newConsoleByteArray);
+      // sets the new standard output to a new PrintStream whose output is going to be collected
+      System.setOut(newConsoleStream);
+
+      // passes simulated user input to addBirthday() to try and add valid birthday
+      frontEnd.addBirthday(input);
+
+      // put the outputted data from the front end into the old print stream using System.out
+      oldConsoleStream.append(newConsoleByteArray.toString());
+
+      // stop using the new standard ouutput stream and go back to using System.out
+      System.setOut(oldConsoleStream);
+
+      // put the outputted text to the console into a string
+      String actual = newConsoleByteArray.toString();
+      // remove the newline from the outputted text
+      actual = actual.substring(0, actual.length() - 2);
+
+      // ensures that the output of the console is correct
+      if (actual.contains("not added") || actual.contains("malformed")
+        || actual.contains("already added")) {
+        System.out.println("A valid birthday could not be added!");
+        return false;
+      }
+      
+      
+
+
+
+      input = new Scanner("n\nJohn\nCena\n");
+
+      // create a new PrintStream object to get the prior output to the console
+      oldConsoleStream = new PrintStream(System.out);
+
+      // create a new console that will be able to collect the standard input to the console
+
+      // creates a new buffer or console where the data that is going to be outputted is stored
+      newConsoleByteArray = new ByteArrayOutputStream();
+      // creates PrintStream Object to get the data that is going to be outputted to the console
+      newConsoleStream = new PrintStream(newConsoleByteArray);
+      // sets the new standard output to a new PrintStream whose output is going to be collected
+      System.setOut(newConsoleStream);
+
+      // passes simulated user input to addBirthday() to try and add valid birthday
+      frontEnd.search(input);
+
+      // put the outputted data from the front end into the old print stream using System.out
+      oldConsoleStream.append(newConsoleByteArray.toString());
+
+      // stop using the new standard ouutput stream and go back to using System.out
+      System.setOut(oldConsoleStream);
+
+      // put the outputted text to the console into a string
+      actual = newConsoleByteArray.toString();
+      // remove the newline from the outputted text
+      actual = actual.substring(0, actual.length() - 2);
+
+      // ensures that the output of the console is correct
+      if (actual.contains("Sorry!")) {
+        System.out.println("A valid name birthday could not be searched for!");
+        return false;
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      input = new Scanner("n\nJohn\nCena\n");
+
+      // create a new PrintStream object to get the prior output to the console
+      oldConsoleStream = new PrintStream(System.out);
+
+      // create a new console that will be able to collect the standard input to the console
+
+      // creates a new buffer or console where the data that is going to be outputted is stored
+      newConsoleByteArray = new ByteArrayOutputStream();
+      // creates PrintStream Object to get the data that is going to be outputted to the console
+      newConsoleStream = new PrintStream(newConsoleByteArray);
+      // sets the new standard output to a new PrintStream whose output is going to be collected
+      System.setOut(newConsoleStream);
+
+      // passes simulated user input to addBirthday() to try and add valid birthday
+      frontEnd.search(input);
+
+      // put the outputted data from the front end into the old print stream using System.out
+      oldConsoleStream.append(newConsoleByteArray.toString());
+
+      // stop using the new standard ouutput stream and go back to using System.out
+      System.setOut(oldConsoleStream);
+
+      // put the outputted text to the console into a string
+      actual = newConsoleByteArray.toString();
+      // remove the newline from the outputted text
+      actual = actual.substring(0, actual.length() - 2);
+
+      // ensures that the output of the console is correct
+      if (actual.contains("Sorry!")) {
+        System.out.println("A valid name birthday could not be searched for!");
+        return false;
+      }
+
+
+
+
+
+    }
 
     return true; // return true if all tests pass
+  }
+
+
+  public static boolean testFrontEndAdd() {
+
+    // create a new front end Object
+    BirthdaySearchFrontEnd frontEnd = new BirthdaySearchFrontEnd();
+
+    // create a scanner to pass input to the front end
+    Scanner scnr = new Scanner("birthdays.csv");
+
+    // create a new PrintStream object to get the prior output to the console
+    PrintStream oldConsoleStream = new PrintStream(System.out);
+
+    // create a new console that will be able to collect the standard input to the console
+
+    // creates a new buffer or console where the data that is going to be outputted is stored
+    ByteArrayOutputStream newConsoleByteArray = new ByteArrayOutputStream();
+    // creates PrintStream Object to get the data that is going to be outputted to the console
+    PrintStream newConsoleStream = new PrintStream(newConsoleByteArray);
+    // sets the new standard output to a new PrintStream whose output is going to be collected
+    System.setOut(newConsoleStream);
+
+    // passes simulated user input to loadCSV() to try and load a valid file
+    frontEnd.loadCSV(scnr);
+
+    // put the outputted data from the front end into the old print stream using System.out
+    oldConsoleStream.append(newConsoleByteArray.toString());
+
+    // stop using the new standard ouutput stream and go back to using System.out
+    System.setOut(oldConsoleStream);
+
+    // put the outputted text to the console into a string
+    String actualOutput = newConsoleByteArray.toString();
+    // remove the newline from the outputted text
+    actualOutput = actualOutput.substring(0, actualOutput.length() - 2);
+    // create String objects depending upon what the expected output is for each front end
+    String expectedOutputOne = "CSV file successfully loaded!";
+    String expectedOutputTwo = "CSV file loaded successfully.";
+
+    Scanner input;
+    if (actualOutput.contains("loaded!")) {
+      input = new Scanner("John\nCena\n1977\n04\n23\ny\n10\n11\ny");
+    } else {
+      input = new Scanner("John\nCena\n1977\n04\n23\n10\n11\n");
+    }
+
+    // create a new PrintStream object to get the prior output to the console
+    PrintStream oldStream = new PrintStream(System.out);
+
+    // create a new console that will be able to collect the standard input to the console
+
+    // creates a new buffer or console where the data that is going to be outputted is stored
+    ByteArrayOutputStream newConsole = new ByteArrayOutputStream();
+    // creates PrintStream Object to get the data that is going to be outputted to the console
+    PrintStream newStream = new PrintStream(newConsole);
+    // sets the new standard output to a new PrintStream whose output is going to be collected
+    System.setOut(newStream);
+
+    // passes simulated user input to addBirthday() to try and add valid birthday
+    frontEnd.addBirthday(input);
+
+    // put the outputted data from the front end into the old print stream using System.out
+    oldStream.append(newConsole.toString());
+
+    // stop using the new standard ouutput stream and go back to using System.out
+    System.setOut(oldStream);
+
+    // put the outputted text to the console into a string
+    String actual = newConsole.toString();
+    // remove the newline from the outputted text
+    actual = actual.substring(0, actual.length() - 2);
+
+    // ensures that the output of the console is correct
+    if (actual.contains("not added") || actual.contains("malformed")
+      || actual.contains("already added")) {
+      System.out.println("A valid csv file could not be loaded successfully!");
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -876,17 +1230,16 @@ public class testBirthdaySearchTool {
    * @param args unused
    */
   public static void main(String[] args) {
-    System.out.println(testLoadFile());
-    System.out.println(testBirthdayObject());
-    System.out.println(testBirthdayTreeCreation());
-    System.out.println(testClear());
-
+    // System.out.println(testLoadFile());
+    // System.out.println(testBirthdayObject());
+    // System.out.println(testBirthdayTreeCreation());
+    // System.out.println(testClear());
+    System.out.println(testFrontEnd());
+    // System.out.println(testFrontEndAdd());
 
   }
 
-  // testListBirthday() // ensure that the Red/Black tree lists the correct birthdays in the correct
-  // order
-  // testClear() // ensures that all of the BirthdayObjects within the RB tree are removed correctly
+
   // testPrintTodaysBirthdays() // ensures that the list of birthdays on the current date is correct
   // testPrintBirthdaysInRange() // ensures that list of birthdays within range is correct
   // testSearchByBirthday() // ensures returns correct name when searching their birthday
