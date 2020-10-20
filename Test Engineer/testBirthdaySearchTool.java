@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  * @author Peter Sykora
  *
  */
-public class testBirthdaySearchTool {
+public class TestBirthdaySearchTool {
 
   /**
    * This test method ensures that the passed file can either be correctly loaded because the file
@@ -1202,10 +1202,9 @@ public class testBirthdaySearchTool {
 
 
 
-    
     // Test search() when searching for a invalid birthdate in the tree
 
-    
+
     // assign the input based upon whose front end we are using
     if (backend.contains("Matt")) {
       input = new Scanner("d\n0001\n00\n00\n00\n00\n");
