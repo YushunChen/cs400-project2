@@ -81,7 +81,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
       root = bdTree.root;
       size++;
     } catch (NullPointerException e1) {
-      System.out.print("The provided data argument (Birthday) is null!");
+      System.out.println("The provided data argument (Birthday) is null!");
+      return false;
     } catch (IllegalArgumentException e2) {
       throw new BirthdayAlreadyAddedException("The birthday is already added in the tree!");
     }
