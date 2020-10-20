@@ -105,6 +105,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
       findBd = new Birthday(date, "", "");
     } catch (IllegalBirthdayFormatException e) {
       System.out.println("The birthday format is illegal!");
+      return null;
     }
     return this.searchBirthdayHelper(findBd, root);
   }
