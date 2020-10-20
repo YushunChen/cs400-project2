@@ -68,6 +68,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * starts anew with a new RedBlack tree. 
 	 */
 	public void clear() {
+		//Resets all instance fields 
 		this.tree = new RedBlackTree<Birthday>(); 
 		this.size = 0; 
 		this.birthdayList = new ArrayList<Birthday>(); 
@@ -80,12 +81,18 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * @throws IllegalBirthdayFormatException if the fullDate string is not in the proper format
 	 * @returns foundBirthday the Birthday Object if found within the tree 
 	 */
-	public Birthday searchBirthday(String fullDate) throws IllegalBirthdayFormatException {
+	public Birthday searchBirthday(String fullDate) throws BirthdayNotFoundException{
 		//Instantiating new "dummy" Birthday Object. This works because Birthday's overriden
-		//compareTo only looks that the Birthday Date. 
-		Birthday toFind = new Birthday(fullDate, "test", "test");
-		Birthday foundBirthday = searchHelper(toFind, this.root);  
-		return foundBirthday; 
+		//compareTo only looks at the Birthday Date. 
+		try {
+			Birthday toFind = new Birthday(fullDate, "test", "test");
+			Birthday foundBirthday = searchHelper(toFind, this.root);  
+			return foundBirthday; 
+		}
+		catch(IllegalBirthdayFormatException ibfe) {
+			System.out.println("Birthday not in proper format!");
+			return null; 
+		}
 	}
 	
 	/**
@@ -96,7 +103,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * @throws BirthdayNotFoundException if the birthday is not found in the tree 
 	 * @return toReturn the Birthday object matching the one we are searching for if found.
 	 */
-	private Birthday searchHelper(Birthday birthday, Node<Birthday> currNode) {
+	private Birthday searchHelper(Birthday birthday, Node<Birthday> currNode) throws BirthdayNotFoundException {
 		//If the birthday contained within the current Node matches, returns this birthday 
 		if (currNode.data.compareTo(birthday) == 0 ) {
 			return currNode.data; 
@@ -124,9 +131,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 				Birthday toReturn = searchHelper(birthday, currNode.rightChild); 
 				return toReturn; 
 			}
-		}
-		
-		//Check what the final return statement should be 
+		} 
 		return birthday; 
 	}
 	
@@ -135,10 +140,12 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * @param fileName String object representing the name of a csv file containing birthdays
 	 */
 	public boolean loadBirthdaysFromReader(String fileName) { 
-		
+		//New BirthdayReader object used to read information from csv 
 		BirthdayReader reader = new BirthdayReader();
 		if (reader.getBirthdaysFromCSV(fileName)) {
-			ArrayList<Birthday> birthdayList = reader.getBirthdayList(); 
+			ArrayList<Birthday> birthdayList = reader.getBirthdayList();
+			//Iterates through ArrayList of birthdays and calls BirthdayTree add method
+			//To add teh Birthdays to the tree
 			for (Birthday birthday : birthdayList) { 
 				try {
 					this.addBirthday(birthday);
