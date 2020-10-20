@@ -10,6 +10,8 @@
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * This class contains the entire program that tests the files and respective methods within the BST
@@ -28,7 +30,8 @@ public class testBirthdaySearchTool {
    * 
    * @return true if all tests pass, false if otherwise
    */
-  public static boolean testLoadFile() {
+  @Test
+  public void testLoadFile() {
 
     { // Test 1 - the file does not exist
 
@@ -37,13 +40,12 @@ public class testBirthdaySearchTool {
 
       // attempts to read and furthermore get the birthdays from a file that does not exist
       if (reader.getBirthdaysFromCSV("birthdayList.csv")) {
-        System.out.println("A file that does not exist could be loaded");
-        return false; // return false if can load a file that does not exist
+        fail("A file that does not exist could be loaded!");
       }
 
       // check to see if birthdays can be added to the list of birthdays from a nonexistent file
       if (reader.getBirthdayList().size() != 0) {
-        return false; // return false if there are birthdays within the file that does not exist
+        fail("There are birthdays within the file that does not exist!");
       }
 
     }
@@ -55,13 +57,11 @@ public class testBirthdaySearchTool {
 
       // attempts to read and furthermore get the birthdays from a file that does not exist
       if (!reader.getBirthdaysFromCSV("birthdays.csv")) {
-        System.out.println("A file that does exist could be not loaded");
-        return false; // return false if cannot load a file that does not exist
+        fail("A file that does exist could be not loaded");
       }
 
     }
 
-    return true; // return true if all tests pass
   }
 
   /**
@@ -71,204 +71,215 @@ public class testBirthdaySearchTool {
    * 
    * @return true if all tests pass, false if otherwise
    */
-  public static boolean testBirthdayObject() {
+  @Test
+  public void testBirthdayObject() {
 
     { // Test 1 - create Birthday Objects with birthdates that are neither LONG or SHORT patterns
 
       // tries to create a Birthday Object with an empty string
       try {
         Birthday birthday = new Birthday("", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("An empty string can be formatted to a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with an mla formatted string
       try {
         Birthday birthday = new Birthday("22 June 1980", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("An mla formatted string can be formatted to a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with an apa formatted string
       try {
         Birthday birthday = new Birthday("June 22, 1980", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("An apa formatted string can be formatted to a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a string or random numbers, symbols, breaks, & letters
       try {
         Birthday birthday = new Birthday("U#* u54 \n mwqfas", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("A string or random numbers, symbols, breaks, & letters can be formatted to a "
+          + "birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
-      // TODO:
       // tries to create Birthday Object with a LONG pattern whose month that doesn't exist
       try {
         Birthday birthday = new Birthday("1980/15/12/12/12", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("A Birthday Object with a LONG pattern whose month that doesn't exist can be "
+          + "formatted to a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
-      // TODO:
       // tries to create Birthday Object with a LONG pattern whose day that doesn't exist
       try {
         Birthday birthday = new Birthday("1980/10/56/12/12", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose day that doesn't exist can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
-      // TODO:
       // tries to create Birthday Object with a LONG pattern whose hour that doesn't exist
       try {
         Birthday birthday = new Birthday("1980/10/11/63/12", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose hour that doesn't exist can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
-      // TODO:
       // tries to create Birthday Object with a LONG pattern minute that doesn't exist
       try {
         Birthday birthday = new Birthday("1980/10/11/08/88", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose minute that doesn't exist can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern year that is too short
       try {
         Birthday birthday = new Birthday("198/10/11/08/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("A Birthday Object with a LONG pattern year that is too short can be formatted to "
+          + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose year that is too long
       try {
         Birthday birthday = new Birthday("19233/10/11/08/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose year that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose month that is too short
       try {
         Birthday birthday = new Birthday("19233/1/11/08/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose month that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose month that is too long
       try {
         Birthday birthday = new Birthday("19233/103/11/08/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose month that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose day that is too short
       try {
         Birthday birthday = new Birthday("19233/10/1/08/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose day that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose day that is too long
       try {
         Birthday birthday = new Birthday("19233/10/113/08/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail("A Birthday Object with a LONG pattern whose day that is too long can be formatted to "
+          + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose hour that is too short
       try {
         Birthday birthday = new Birthday("19233/10/11/8/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose hour that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose hour that is too long
       try {
         Birthday birthday = new Birthday("19233/10/113/089/33", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose hour that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose minute that is too short
       try {
         Birthday birthday = new Birthday("19233/10/11/08/3", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose minute that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a LONG pattern whose minute that is too long
       try {
         Birthday birthday = new Birthday("19233/10/113/08/333", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a LONG pattern whose minute that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a SHORT pattern whose year that is too short
       try {
         Birthday birthday = new Birthday("198/06/22", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a SHORT pattern whose year that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a SHORT pattern whose year that is too long
       try {
         Birthday birthday = new Birthday("19808/06/22", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a SHORT pattern whose year that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a SHORT pattern whose month that is too short
       try {
         Birthday birthday = new Birthday("1980/6/22", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a SHORT pattern whose month that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a SHORT pattern whose month that is too long
       try {
         Birthday birthday = new Birthday("1980/062/22", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a SHORT pattern whose month that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a SHORT pattern whose day that is too short
       try {
         Birthday birthday = new Birthday("1980/06/2", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a SHORT pattern whose day that is too short can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
       // tries to create Birthday Object with a SHORT pattern whose day that is too long
       try {
         Birthday birthday = new Birthday("1980/06/224", "Gary", "Winthrop");
-        return false; // if an empty string can be formatted to a birthdate pattern
+        fail(
+          "A Birthday Object with a SHORT pattern whose day that is too long can be formatted to "
+            + "a birthdate pattern");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
       }
 
     }
@@ -282,29 +293,28 @@ public class testBirthdaySearchTool {
       try {
         firstBirthday = new Birthday("1980/06/22", "Gary", "Winthrop");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // ensures that the birthdate in the long format of this Birthday Object is correct
       if (!firstBirthday.getBirthdayLong().equals(19800622L)) {
-        return false;
+        fail("The birthdate in the long format of this Birthday Object is incorrect!");
       }
       // ensures that the birthday Date Object of this Birthday Object is correct
       if (!firstBirthday.getBirthday().toString().equals("Sun Jun 22 00:00:00 CDT 1980")) {
-        return false;
+        fail("The birthday Date Object of this Birthday Object is incorrect!");
       }
       // ensures that the first name of this Birthday Object is correct
       if (!firstBirthday.getFirstName().equals("Gary")) {
-        return false;
+        fail("The first name of this Birthday Object is incorrect!");
       }
       // ensures that the last name of this Birthday Object is correct
       if (!firstBirthday.getLastName().equals("Winthrop")) {
-        return false;
+        fail("The last name of this Birthday Object is incorrect!");
       }
       // ensure that the toString() method returns the correct information of this Birthday Object
       if (!firstBirthday.toString().equals("Gary Winthrop: Sunday June 22, 1980 @ 00:00 AM")) {
-        return false;
+        fail("The toString() method of this Birthday Object returns the incorrect info!");
       }
 
       // create the second Birthday Object to be tested
@@ -314,29 +324,28 @@ public class testBirthdaySearchTool {
       try {
         secondBirthday = new Birthday("1995/10/28", "Aaron", "Hall");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // ensures that the birthdate in the long format of this Birthday Object is correct
       if (!secondBirthday.getBirthdayLong().equals(19951028L)) {
-        return false;
+        fail("The birthdate in the long format of this Birthday Object is incorrect!");
       }
       // ensures that the birthday Date Object of this Birthday Object is correct
       if (!secondBirthday.getBirthday().toString().equals("Sat Oct 28 00:00:00 CDT 1995")) {
-        return false;
+        fail("The birthday Date Object of this Birthday Object is incorrect!");
       }
       // ensures that the first name of this Birthday Object is correct
       if (!secondBirthday.getFirstName().equals("Aaron")) {
-        return false;
+        fail("The first name of this Birthday Object is incorrect!");
       }
       // ensures that the last name of this Birthday Object is correct
       if (!secondBirthday.getLastName().equals("Hall")) {
-        return false;
+        fail("The last name of this Birthday Object is incorrect!");
       }
       // ensure that the toString() method returns the correct information of this Birthday Object
       if (!secondBirthday.toString().equals("Aaron Hall: Saturday October 28, 1995 @ 00:00 AM")) {
-        return false;
+        fail("The toString() method of this Birthday Object returns the incorrect info!");
       }
 
       // create the third Birthday Object to be tested
@@ -346,45 +355,47 @@ public class testBirthdaySearchTool {
       try {
         thirdBirthday = new Birthday("1995/10/28", "Cameron", "Famularo");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // ensures that the birthdate in the long format of this Birthday Object is correct
       if (!thirdBirthday.getBirthdayLong().equals(19951028L)) {
-        return false;
+        fail("The birthdate in the long format of this Birthday Object is incorrect!");
       }
       // ensures that the birthday Date Object of this Birthday Object is correct
       if (!thirdBirthday.getBirthday().toString().equals("Sat Oct 28 00:00:00 CDT 1995")) {
-        return false;
+        fail("The birthday Date Object of this Birthday Object is incorrect!");
       }
       // ensures that the first name of this Birthday Object is correct
       if (!thirdBirthday.getFirstName().equals("Cameron")) {
-        return false;
+        fail("The first name of this Birthday Object is incorrect!");
       }
       // ensures that the last name of this Birthday Object is correct
       if (!thirdBirthday.getLastName().equals("Famularo")) {
-        return false;
+        fail("The last name of this Birthday Object is incorrect!");
       }
       // ensure that the toString() method returns the correct information of this Birthday Object
       if (!thirdBirthday.toString()
         .equals("Cameron Famularo: Saturday October 28, 1995 @ 00:00 AM")) {
-        return false;
+        fail("The toString() method of this Birthday Object returns the incorrect info!");
       }
 
       // compare the Birthday Objects
 
       // ensure that the birthday this method is called on occurs after the arg and is yields 1
       if (secondBirthday.compareTo(firstBirthday) != 1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur after the arg and does not yield 1");
       }
       // ensure that the birthday this method is called on occurs before the arg and is yields -1
       if (firstBirthday.compareTo(secondBirthday) != -1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur before the arg and does not yield -1");
       }
       // ensure that the birthday this method is called on is the same as the arg and is yields 0
       if (secondBirthday.compareTo(thirdBirthday) != 0) {
-        return false;
+        fail(
+          "The birthday this method is called on is not the same as the arg and does not yield 0");
       }
 
     }
@@ -398,29 +409,28 @@ public class testBirthdaySearchTool {
       try {
         firstBirthday = new Birthday("1980/06/22/12/24", "Gary", "Winthrop");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // ensures that the birthdate in the long format of this Birthday Object is correct
       if (!firstBirthday.getBirthdayLong().equals(198006221224L)) {
-        return false;
+        fail("The birthdate in the long format of this Birthday Object is incorrect!");
       }
       // ensures that the birthday Date Object of this Birthday Object is correct
       if (!firstBirthday.getBirthday().toString().equals("Sun Jun 22 12:24:00 CDT 1980")) {
-        return false;
+        fail("The birthday Date Object of this Birthday Object is incorrect!");
       }
       // ensures that the first name of this Birthday Object is correct
       if (!firstBirthday.getFirstName().equals("Gary")) {
-        return false;
+        fail("The first name of this Birthday Object is incorrect!");
       }
       // ensures that the last name of this Birthday Object is correct
       if (!firstBirthday.getLastName().equals("Winthrop")) {
-        return false;
+        fail("The last name of this Birthday Object is incorrect!");
       }
       // ensure that the toString() method returns the correct information of this Birthday Object
       if (!firstBirthday.toString().equals("Gary Winthrop: Sunday June 22, 1980 @ 12:24 PM")) {
-        return false;
+        fail("The toString() method of this Birthday Object returns the incorrect info!");
       }
 
       // create the second Birthday Object to be tested
@@ -430,29 +440,28 @@ public class testBirthdaySearchTool {
       try {
         secondBirthday = new Birthday("1995/10/28/10/11", "Aaron", "Hall");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // ensures that the birthdate in the long format of this Birthday Object is correct
       if (!secondBirthday.getBirthdayLong().equals(199510281011L)) {
-        return false;
+        fail("The birthdate in the long format of this Birthday Object is incorrect!");
       }
       // ensures that the birthday Date Object of this Birthday Object is correct
       if (!secondBirthday.getBirthday().toString().equals("Sat Oct 28 10:11:00 CDT 1995")) {
-        return false;
+        fail("The birthday Date Object of this Birthday Object is incorrect!");
       }
       // ensures that the first name of this Birthday Object is correct
       if (!secondBirthday.getFirstName().equals("Aaron")) {
-        return false;
+        fail("The first name of this Birthday Object is incorrect!");
       }
       // ensures that the last name of this Birthday Object is correct
       if (!secondBirthday.getLastName().equals("Hall")) {
-        return false;
+        fail("The last name of this Birthday Object is incorrect!");
       }
       // ensure that the toString() method returns the correct information of this Birthday Object
       if (!secondBirthday.toString().equals("Aaron Hall: Saturday October 28, 1995 @ 10:11 AM")) {
-        return false;
+        fail("The toString() method of this Birthday Object returns the incorrect info!");
       }
 
       // create the third Birthday Object to be tested
@@ -462,45 +471,47 @@ public class testBirthdaySearchTool {
       try {
         thirdBirthday = new Birthday("1995/10/28/10/11", "Cameron", "Famularo");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // ensures that the birthdate in the long format of this Birthday Object is correct
       if (!thirdBirthday.getBirthdayLong().equals(199510281011L)) {
-        return false;
+        fail("The birthdate in the long format of this Birthday Object is incorrect!");
       }
       // ensures that the birthday Date Object of this Birthday Object is correct
       if (!thirdBirthday.getBirthday().toString().equals("Sat Oct 28 10:11:00 CDT 1995")) {
-        return false;
+        fail("The birthday Date Object of this Birthday Object is incorrect!");
       }
       // ensures that the first name of this Birthday Object is correct
       if (!thirdBirthday.getFirstName().equals("Cameron")) {
-        return false;
+        fail("The first name of this Birthday Object is incorrect!");
       }
       // ensures that the last name of this Birthday Object is correct
       if (!thirdBirthday.getLastName().equals("Famularo")) {
-        return false;
+        fail("The last name of this Birthday Object is incorrect!");
       }
       // ensure that the toString() method returns the correct information of this Birthday Object
       if (!thirdBirthday.toString()
         .equals("Cameron Famularo: Saturday October 28, 1995 @ 10:11 AM")) {
-        return false;
+        fail("The toString() method of this Birthday Object returns the incorrect info!");
       }
 
       // compare the Birthday Objects
 
       // ensure that the birthday this method is called on occurs after the arg and is yields 1
       if (secondBirthday.compareTo(firstBirthday) != 1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur after the arg and does not yield 1");
       }
       // ensure that the birthday this method is called on occurs before the arg and is yields -1
       if (firstBirthday.compareTo(secondBirthday) != -1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur before the arg and does not yield -1");
       }
       // ensure that the birthday this method is called on is the same as the arg and is yields 0
       if (secondBirthday.compareTo(thirdBirthday) != 0) {
-        return false;
+        fail(
+          "The birthday this method is called on is not the same as the arg and does not yield 0");
       }
 
     }
@@ -518,28 +529,29 @@ public class testBirthdaySearchTool {
         secondBirthday = new Birthday("1995/10/28", "Aaron", "Hall");
         thirdBirthday = new Birthday("1995/10/28/10/11", "Cameron", "Famularo");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // the creation of valid Birthday Objects should not throw an exception
+        fail("The creation of valid Birthday Objects should not throw an exception");
       }
 
       // compare the Birthday Objects
 
       // ensure that the birthday this method is called on occurs after the arg and is yields 1
       if (secondBirthday.compareTo(firstBirthday) != 1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur after the arg and does not yield 1");
       }
       // ensure that the birthday this method is called on occurs before the arg and is yields -1
       if (firstBirthday.compareTo(secondBirthday) != -1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur before the arg and does not yield -1");
       }
       // ensure that the birthday this method is called on is the same as the arg and is yields 0
       if (secondBirthday.compareTo(thirdBirthday) != -1) {
-        return false;
+        fail(
+          "The birthday this method is called on does not occur before the arg and does not yield -1");
       }
 
     }
 
-    return true; // return true if all tests pass
   }
 
   /**
@@ -550,7 +562,8 @@ public class testBirthdaySearchTool {
    * 
    * @return true if all tests pass, false if otherwise
    */
-  public static boolean testBirthdayTreeCreation() {
+  @Test
+  public void testBirthdayTreeCreation() {
 
     { // Test 1 - ensures that a simple valid Red Black Tree can be created
 
@@ -582,107 +595,95 @@ public class testBirthdaySearchTool {
         birthday9 = new Birthday("1998/01/09", "Steve", "Jeffry");
         birthday10 = new Birthday("1999/01/10", "Baggie", "Beach");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // all of these Birthday Objects should be valid input
+        fail("The creation of valid Birthday Objects should not throw an exception!");
       }
 
       // tries to add valid Birthday Objects to the BirthdayTree
       if (!tree.addBirthday(birthday4)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday7)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday3)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday1)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday10)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday8)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday6)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday2)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday5)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
       if (!tree.addBirthday(birthday9)) {
-        return false;
+        fail("The adding of a valid Birthday Objects to the tree should not be false!");
       }
 
       // ensures that the Birthday Objects are in the correct position and are the correct color
       if (!tree.getRoot().data.toString()
         .equals("Bean And Cream: Monday January 04, 1993 @ 00:00 AM") && !tree.getRoot().isBlack) {
-        System.out.println("WRONG ROOT");
-        return false;
+        fail("The root of the tree is the wrong!");
       }
       if (!tree.getRoot().leftChild.data.toString()
         .equals("Charleton Heston: Wednesday January 02, 1991 @ 00:00 AM")
         && !tree.getRoot().leftChild.isBlack) {
-        System.out.println("WRONG LEFTCHILD");
-        return false;
+        fail("The leftchild of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.data.toString()
         .equals("Mrs Bungus: Wednesday January 08, 1997 @ 00:00 AM")
         && tree.getRoot().rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD");
-        return false;
+        fail("The rightchild of the tree is the wrong!");
       }
       if (!tree.getRoot().leftChild.leftChild.data.toString()
         .equals("Patrick Harvey: Monday January 01, 1990 @ 00:00 AM")
         && tree.getRoot().leftChild.leftChild.isBlack) {
-        System.out.println("WRONG LEFTCHILD LEFTCHILD");
-        return false;
+        fail("The leftchild leftchild of the tree is the wrong!");
       }
       if (!tree.getRoot().leftChild.rightChild.data.toString()
         .equals("Edward Bryant: Friday January 03, 1992 @ 00:00 AM")
         && tree.getRoot().leftChild.rightChild.isBlack) {
-        System.out.println("WRONG LEFTCHILD RIGHTCHILD");
-        return false;
+        fail("The leftchild rightChild of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.rightChild.data.toString()
         .equals("Baggie Beach: Sunday January 10, 1999 @ 00:00 AM")
         && !tree.getRoot().rightChild.rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD RIGHTCHILD");
-        return false;
+        fail("The rightChild rightChild of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.leftChild.data.toString()
         .equals("Jeb Bush: Friday January 06, 1995 @ 00:00 AM")
         && !tree.getRoot().rightChild.leftChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD LEFTCHILD");
-        return false;
+        fail("The rightChild leftchild of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.leftChild.leftChild.data.toString()
         .equals("Jerry Riva: Wednesday January 05, 1994 @ 00:00 AM")
         && tree.getRoot().rightChild.leftChild.leftChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD LEFTCHILD LEFTCHILD");
-        return false;
+        fail("The rightchild leftchild leftchild of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.leftChild.rightChild.data.toString()
         .equals("Becky Bank: Sunday January 07, 1996 @ 00:00 AM")
         && tree.getRoot().rightChild.leftChild.rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD LEFTCHILD RIGHTCHILD");
-        return false;
+        fail("The rightchild leftchild rightchild of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.rightChild.leftChild.data.toString()
         .equals("Steve Jeffry: Friday January 09, 1998 @ 00:00 AM")
         && tree.getRoot().rightChild.rightChild.leftChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD RIGHTCHILD LEFTCHILD");
-        return false;
+        fail("The rightchild rightchild leftchild of the tree is the wrong!");
       }
 
       // ensures that the size of the BirthdayTree is correct
       if (tree.getSize() != 10) {
-        System.out.println("The size of the tree is wrong!");
-        return false;
+        fail("The size of the tree is wrong!");
       }
 
       // ensures that the list of the BirthdayTree or the ArrayList of Birthday Objects is correct
@@ -696,8 +697,7 @@ public class testBirthdaySearchTool {
           + "Wednesday January 05, 1994 @ 00:00 AM, Steve Jeffry: Friday January 09, 1998 @ 00:00 "
           + "AM]";
       if (!listOutput.equals(expectedListOutput)) {
-        System.out.println("The ArrayList of Birthdays is wrong!");
-        return false;
+        fail("The ArrayList of Birthdays is wrong!");
       }
 
     }
@@ -719,8 +719,7 @@ public class testBirthdaySearchTool {
         birthday2 = new Birthday("1991/01/02", "Charleton", "Heston");
         birthday3 = new Birthday("1991/01/02", "Edward", "Bryant");
       } catch (IllegalBirthdayFormatException e) {
-        System.out.println(e.getMessage());
-        return false; // all of these Birthday Objects should be "valid" input when not in the tree
+        fail("The creation of valid Birthday Objects should not throw an exception!");
       }
 
       // ensures that two objects with the same birthdate cannot be added to the tree
@@ -728,39 +727,32 @@ public class testBirthdaySearchTool {
         tree.addBirthday(birthday1);
         tree.addBirthday(birthday2);
         tree.addBirthday(birthday3); // this birthdate is the exact same as birthday2
-        // TODO:
-        return false; // if two objects with the same birthdate can be added to the tree
+        fail("Two objects with the same birthdate could be added to the tree!");
       } catch (BirthdayAlreadyAddedException e) {
-        System.out.println(e.getMessage());
       }
 
       // ensures that you cannot add a null Birthday Object or null reference in general to the tree
       if (tree.addBirthday(birthday4)) {
-        System.out.println("Could add a null Birthday Object to the tree which is wrong!");
-        return false;
+        fail("Could add a null Birthday Object to the tree which is wrong!");
       }
       if (tree.addBirthday(null)) {
-        System.out.println("Could add a null reference to the tree which is wrong!");
-        return false;
+        fail("Could add a null reference to the tree which is wrong!");
       }
 
       // ensures that the Birthday Objects are in the correct position and are the correct color
       if (!tree.getRoot().data.toString()
         .equals("Patrick Harvey: Monday January 01, 1990 @ 00:00 AM") && !tree.getRoot().isBlack) {
-        System.out.println("WRONG ROOT");
-        return false;
+        fail("The root of the tree is the wrong!");
       }
       if (!tree.getRoot().rightChild.data.toString()
         .equals("Charleton Heston: Wednesday January 02, 1991 @ 00:00 AM")
         && tree.getRoot().rightChild.isBlack) {
-        System.out.println("WRONG RIGHTCHILD");
-        return false;
+        fail("The rightchild of the tree is the wrong!");
       }
 
       // ensures that the size of the BirthdayTree is correct
       if (tree.getSize() != 2) {
-        System.out.println("The size of the tree is wrong!");
-        return false;
+        fail("The size of the tree is wrong!");
       }
 
       // ensures that the list of the BirthdayTree or the ArrayList of Birthday Objects is correct
@@ -768,13 +760,11 @@ public class testBirthdaySearchTool {
       String expectedListOutput = "[Patrick Harvey: Monday January 01, 1990 @ 00:00 AM, Charleton "
         + "Heston: Wednesday January 02, 1991 @ 00:00 AM]";
       if (!listOutput.equals(expectedListOutput)) {
-        System.out.println("The ArrayList of Birthdays is wrong!");
-        return false;
+        fail("The ArrayList of Birthdays is wrong!");
       }
 
     }
 
-    return true; // return true if all tests pass
   }
 
   /**
@@ -1240,22 +1230,6 @@ public class testBirthdaySearchTool {
     }
 
     return true; // return true if all tests pass
-  }
-
-
-  /**
-   * This main method contains the entire program that calls the tests methods within this class to
-   * ensure that the BST or Birthday Search Tool functions correctly.
-   * 
-   * @param args unused
-   */
-  public static void main(String[] args) {
-    System.out.println(testLoadFile());
-    System.out.println(testBirthdayObject());
-    System.out.println(testBirthdayTreeCreation());
-    System.out.println(testClear());
-    System.out.println(testFrontEnd());
-
   }
 
 }
