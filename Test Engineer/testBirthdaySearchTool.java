@@ -1237,7 +1237,8 @@ public class TestBirthdaySearchTool {
     actual = actual.substring(0, actual.length() - 2);
 
     // ensures that the output of the console is correct
-    if (!actual.contains("no birthday") && !actual.contains("Try again")) {
+    if (!actual.contains("no birthday") && !actual.contains("Try again")
+      && !actual.contains("Not Found")) {
       fail("An invalid birthdate could be searched for!");
     }
 
