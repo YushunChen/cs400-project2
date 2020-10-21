@@ -85,7 +85,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 		//Instantiating new "dummy" Birthday Object. This works because Birthday's overriden
 		//compareTo only looks at the Birthday Date. 
 		try {
-			Birthday toFind = new Birthday(fullDate, "test", "test");
+			Birthday toFind = new Birthday(fullDate, "", "");
 			Birthday foundBirthday = searchHelper(toFind, this.tree.root);  
 			return foundBirthday; 
 		}
@@ -104,39 +104,29 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 * @return toReturn the Birthday object matching the one we are searching for if found.
 	 */
 	private Birthday searchHelper(Birthday birthday, Node<Birthday> currNode) throws BirthdayNotFoundException {
-		//If the birthday contained within the current Node matches, returns this birthday 
-		System.out.println(this.tree);
-		System.out.println("ROOT: " + this.tree.root); 
-		if (currNode.data.compareTo(birthday) == 0 ) {
-			return currNode.data; 
-		}
-		//Checks to see if the birthday is to the left of the current Node in the tree
-		else if (currNode.data.compareTo(birthday) > 0 ) {
-			//If left child of current node is null, birthday is not contained in the tree
-			if (currNode.leftChild == null) { 
-				throw new BirthdayNotFoundException("Birthday Not Found in Tree"); 
-			}
-			//Otherwise recursive call on the left subtree of the current Node  
-			else {
-				Birthday toReturn = searchHelper(birthday, currNode.leftChild);
-				return toReturn; 
-			}
-		}
-		//Checks to see if the birthday should be to the right of the current Node in the tree
-		else if (currNode.data.compareTo(birthday) < 0) {
-			//If right child of current Node is null, then the Birthday doesn't exist in the tree.
-			if (currNode.rightChild == null) {
-				throw new BirthdayNotFoundException("Birthday Not Found in Tree"); 
-			}
-			//Otherwise recursive call to search throught the right subtree of the current node.  
-			else {
-				Birthday toReturn = searchHelper(birthday, currNode.rightChild); 
-				return toReturn; 
-			}
-		}
-		return birthday;
-	}
 	
+		if (currNode == null) {
+			throw new BirthdayNotFoundException("Birthday Not Found In Tree"); 
+		}
+		//If the birthday contained within the current Node matches, returns this birthday 
+		Birthday currBirthday = currNode.data;
+		Birthday foundBirthday = null; 
+		int diffVal = currBirthday.compareTo(birthday); 
+		//If Birthday contained within current Node is equal to birthday we're searching for, return it
+		if (diffVal == 0) {
+			return currBirthday; 
+		}
+		//If compareTo returns 1, this means that the Birthday within the node is AFTER the birthday we're 
+		//searching for, so recursively search the left subtree. 
+		if (diffVal > 1) {
+			foundBirthday = searchHelper(birthday, currNode.leftChild);
+		}
+		else {
+			foundBirthday = searchHelper(birthday, currNode.rightChild);
+		}
+		return foundBirthday; 
+	}
+			
 	/**
 	 * Reads and adds birthdays from a user-specified csv file to the BirthdayTree 
 	 * @param fileName String object representing the name of a csv file containing birthdays
