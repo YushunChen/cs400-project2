@@ -86,7 +86,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 		//compareTo only looks at the Birthday Date. 
 		try {
 			Birthday toFind = new Birthday(fullDate, "test", "test");
-			Birthday foundBirthday = searchHelper(toFind, this.root);  
+			Birthday foundBirthday = searchHelper(toFind, this.tree.root);  
 			return foundBirthday; 
 		}
 		catch(IllegalBirthdayFormatException ibfe) {
@@ -105,11 +105,13 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 	 */
 	private Birthday searchHelper(Birthday birthday, Node<Birthday> currNode) throws BirthdayNotFoundException {
 		//If the birthday contained within the current Node matches, returns this birthday 
+		System.out.println(this.tree);
+		System.out.println("ROOT: " + this.tree.root); 
 		if (currNode.data.compareTo(birthday) == 0 ) {
 			return currNode.data; 
 		}
 		//Checks to see if the birthday is to the left of the current Node in the tree
-		if (currNode.data.compareTo(birthday)>0 ) {
+		else if (currNode.data.compareTo(birthday) > 0 ) {
 			//If left child of current node is null, birthday is not contained in the tree
 			if (currNode.leftChild == null) { 
 				throw new BirthdayNotFoundException("Birthday Not Found in Tree"); 
@@ -121,7 +123,7 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 			}
 		}
 		//Checks to see if the birthday should be to the right of the current Node in the tree
-		else if (currNode.data.compareTo(birthday)<0) {
+		else if (currNode.data.compareTo(birthday) < 0) {
 			//If right child of current Node is null, then the Birthday doesn't exist in the tree.
 			if (currNode.rightChild == null) {
 				throw new BirthdayNotFoundException("Birthday Not Found in Tree"); 
@@ -131,8 +133,8 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 				Birthday toReturn = searchHelper(birthday, currNode.rightChild); 
 				return toReturn; 
 			}
-		} 
-		return birthday; 
+		}
+		return birthday;
 	}
 	
 	/**
