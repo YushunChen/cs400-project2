@@ -155,11 +155,11 @@ public class BirthdayTree extends RedBlackTree<Birthday> implements BirthdayTree
 					continue; 
 				}
 			}
-		}
-		else {
 			return true; 
 		}
-		return true; 
+		else {
+			return false; 
+		} 
 	}
 	
 	/**
