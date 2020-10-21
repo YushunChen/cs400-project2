@@ -990,8 +990,6 @@ public class TestBirthdaySearchTool {
     // remove the newline from the outputted text
     actualOutput = actualOutput.substring(0, actualOutput.length() - 2);
     // create String objects depending upon what the expected output is for each front end
-    String expectedOutputOne = "CSV file successfully loaded!";
-    String expectedOutputTwo = "CSV file loaded successfully.";
 
     // ensures that the output of the console is correct
     if (actualOutput.contains("Invalid")) {
@@ -1005,8 +1003,8 @@ public class TestBirthdaySearchTool {
 
     // determine whose front end we are using based upon the output of the last test
     // assign the input based upon whose front end we are using
-    if (actualOutput.contains("loaded!")) {
-      input = new Scanner("John\nCena\n1977\n04\n23\ny\n10\n11\ny");
+    if (actualOutput.contains("file successfully")) {
+      input = new Scanner("John\nCena\n1977\n04\n23\ny\n10\n11\ny\n");
       backend = "Matt";
     } else {
       input = new Scanner("John\nCena\n1977\n04\n23\n10\n11\n");
